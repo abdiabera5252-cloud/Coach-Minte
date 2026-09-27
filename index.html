@@ -1,506 +1,1224 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minte Fitness Coach | Personal Training & Online Coaching</title>
+    <title>Minte Fitness Coach | Personal Training & Online Coaching (ብረት ጎፊ)</title>
     
-    <!-- Pre-declare tailwind object safely before loading CDN to prevent ReferenceError -->
     <script>
         window.tailwind = window.tailwind || {};
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        if (typeof tailwind !== 'undefined' && tailwind) {
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        fontFamily: {
-                            sans: ['Inter', 'sans-serif'],
-                            heading: ['Oswald', 'sans-serif'],
-                        },
-                        colors: {
-                            neon: {
-                                green: '#39FF14',
-                                red: '#FF3131',
-                            }
+        window.tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            green: '#22c55e',
+                            greenGlow: '#39FF14',
+                            gold: '#eab308',
+                            red: '#ef4444',
+                            redGlow: '#ff3131',
+                            dark: '#09090b',
+                            card: '#141417',
                         }
                     }
                 }
-            };
-        }
+            }
+        };
     </script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Custom Utility CSS -->
     <style>
-        /* Fallback rules for critical custom styling */
-        :root {
-            --neon-green: #39FF14;
-            --neon-red: #FF3131;
-        }
-        .font-heading {
-            font-family: 'Oswald', sans-serif;
-        }
-        .bg-neon-green {
-            background-color: var(--neon-green) !important;
-        }
-        .text-neon-green {
-            color: var(--neon-green) !important;
-        }
-        .border-neon-green {
-            border-color: var(--neon-green) !important;
-        }
-        .bg-neon-red {
-            background-color: var(--neon-red) !important;
-        }
-        .text-neon-red {
-            color: var(--neon-red) !important;
-        }
-        .border-neon-red {
-            border-color: var(--neon-red) !important;
-        }
-        /* Custom glowing effects */
-        .glow-button {
-            box-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+        .font-heading { font-family: 'Oswald', sans-serif; }
+        
+        .glow-green {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
             transition: all 0.3s ease;
         }
-        .glow-button:hover {
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.8);
+        .glow-green:hover {
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.6);
         }
-        .text-glow {
-            text-shadow: 0 0 10px rgba(255, 49, 49, 0.5);
+
+        .glow-red {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+            transition: all 0.3s ease;
+        }
+        .glow-red:hover {
+            box-shadow: 0 0 30px rgba(255, 49, 49, 0.6);
+        }
+
+        .glass-card {
+            background: rgba(20, 20, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #22c55e;
+        }
+
+        /* Before/After Image Comparison Slider */
+        .ba-container {
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+        .ba-after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 50%;
+            overflow: hidden;
+        }
+        .ba-slider {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: #22c55e;
+            cursor: ew-resize;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px #39FF14;
+        }
+        .ba-slider-handle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #22c55e;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.8);
         }
     </style>
 </head>
-<body class="bg-gray-950 text-gray-200 font-sans antialiased overflow-x-hidden">
+<body class="bg-neutral-950 text-slate-100 font-sans antialiased selection:bg-brand-green selection:text-black min-h-screen flex flex-col">
 
-    <nav class="fixed w-full z-50 top-0 bg-gray-950/90 backdrop-blur-md border-b border-gray-800 transition-all duration-300">
+    <!-- Sticky Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-neutral-950/90 backdrop-blur-md border-b border-neutral-800/80 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center gap-3">
-                    <img src="menu.jpg" alt="Minte Fitness Logo" class="w-10 h-10 rounded-full object-cover border-2 border-neon-green">
-                    <a href="#" class="font-heading text-2xl font-bold tracking-wider text-white uppercase">
-                        Minte<span class="text-neon-red">.</span>Fit
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="relative w-11 h-11 rounded-full p-0.5 bg-gradient-to-tr from-brand-green via-brand-gold to-brand-red group-hover:rotate-180 transition-transform duration-700">
+                        <img src="9235_3d5833.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=300&auto=format&fit=crop'" alt="Minte Fitness Logo" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <div>
+                        <span class="font-heading text-2xl font-bold tracking-wider text-white uppercase block leading-none">
+                            MINTE<span class="text-brand-green">.</span>FIT
+                        </span>
+                        <span class="text-[10px] text-brand-gold uppercase tracking-widest font-semibold block pt-0.5">
+                            ብረት ጎፊ • Coach
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden lg:flex items-center space-x-7">
+                    <a href="#about" class="text-sm font-semibold uppercase tracking-wider text-neutral-300 hover:text-brand-green transition-colors">About</a>
+                    <a href="#transformations" class="text-sm font-semibold uppercase tracking-wider text-neutral-300 hover:text-brand-green transition-colors">Transformations</a>
+                    <a href="#gallery" class="text-sm font-semibold uppercase tracking-wider text-neutral-300 hover:text-brand-green transition-colors">Gallery</a>
+                    <a href="#tiktok" class="text-sm font-semibold uppercase tracking-wider text-neutral-300 hover:text-brand-green transition-colors">TikTok Content</a>
+                    <a href="#calculator" class="text-sm font-semibold uppercase tracking-wider text-neutral-300 hover:text-brand-green transition-colors">Fitness Calc</a>
+                    <a href="#programs" class="text-sm font-semibold uppercase tracking-wider text-neutral-300 hover:text-brand-green transition-colors">Programs</a>
+                </nav>
+
+                <!-- Phone Call Quick Action & CTA -->
+                <div class="hidden sm:flex items-center gap-4">
+                    <a href="tel:0988714114" class="flex items-center gap-2 text-neutral-300 hover:text-brand-green transition-colors font-semibold text-sm px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800">
+                        <i class="fas fa-phone-alt text-brand-green animate-bounce"></i>
+                        <span>0988714114</span>
                     </a>
-                </div>
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#about" class="text-gray-300 hover:text-white transition-colors uppercase text-sm font-semibold tracking-wide">About</a>
-                    <a href="#services" class="text-gray-300 hover:text-white transition-colors uppercase text-sm font-semibold tracking-wide">Services</a>
-                    <a href="#transformations" class="text-gray-300 hover:text-white transition-colors uppercase text-sm font-semibold tracking-wide">Transformations</a>
-                    <a href="#gallery" class="text-gray-300 hover:text-white transition-colors uppercase text-sm font-semibold tracking-wide">Gallery</a>
-                    <a href="#contact" class="text-gray-300 hover:text-white transition-colors uppercase text-sm font-semibold tracking-wide">Contact</a>
-                    <a href="#contact" class="bg-neon-green text-gray-900 px-5 py-2 rounded-full font-bold uppercase text-sm hover:bg-green-400 glow-button">
-                        Join Subscription
-                    </a>
-                </div>
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none" aria-label="Toggle Menu">
-                        <i class="fas fa-bars text-2xl"></i>
+                    <button onclick="openBookingModal('General Inquiry')" class="bg-brand-green text-neutral-950 font-heading font-bold px-5 py-2.5 rounded-full uppercase text-sm tracking-wider hover:bg-green-400 transition-colors glow-green">
+                        Join Now
                     </button>
                 </div>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-gray-900 border-b border-gray-800">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#about" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">About</a>
-                <a href="#services" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">Services</a>
-                <a href="#transformations" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">Transformations</a>
-                <a href="#gallery" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">Gallery</a>
-                <a href="#contact" class="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">Contact</a>
-            </div>
-        </div>
-    </nav>
 
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden flex items-center min-h-[90vh]">
-        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat opacity-40"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/90 to-transparent"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-gray-950 via-gray-950/70 to-transparent"></div>
-        <div class="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" aria-label="Toggle Navigation Menu" class="lg:hidden p-2.5 text-neutral-300 hover:text-white focus:outline-none bg-neutral-900 rounded-lg border border-neutral-800">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-drawer" class="hidden lg:hidden bg-neutral-950/95 border-b border-neutral-800 px-4 pt-3 pb-6 space-y-3">
+            <a href="#about" class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-semibold text-neutral-200 hover:bg-neutral-900 hover:text-brand-green">About Coach</a>
+            <a href="#transformations" class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-semibold text-neutral-200 hover:bg-neutral-900 hover:text-brand-green">Client Transformations</a>
+            <a href="#gallery" class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-semibold text-neutral-200 hover:bg-neutral-900 hover:text-brand-green">Photo Gallery</a>
+            <a href="#tiktok" class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-semibold text-neutral-200 hover:bg-neutral-900 hover:text-brand-green">TikTok Feed</a>
+            <a href="#calculator" class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-semibold text-neutral-200 hover:bg-neutral-900 hover:text-brand-green">BMI & Calorie Calc</a>
+            <a href="#programs" class="mobile-nav-link block px-4 py-2.5 rounded-lg text-base font-semibold text-neutral-200 hover:bg-neutral-900 hover:text-brand-green">Coaching Programs</a>
+            <div class="pt-3 border-t border-neutral-800 flex flex-col gap-3">
+                <a href="tel:0988714114" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-neutral-900 border border-neutral-800 text-brand-green font-bold text-center">
+                    <i class="fas fa-phone-alt"></i> Call: 0988714114
+                </a>
+                <button onclick="openBookingModal('Mobile Subscription')" class="w-full py-3 bg-brand-green text-neutral-950 font-heading font-bold rounded-xl uppercase tracking-wider text-center">
+                    Start Transformation
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-32 pb-20 lg:pt-44 lg:pb-32 min-h-screen flex items-center justify-center overflow-hidden bg-neutral-950">
+        <!-- Hero Background Image Layer: Guarantees visibility across mobile (320px+) and desktop -->
+        <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1920&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover object-center z-0 opacity-45" alt="Gym Background" />
         
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="text-left space-y-8 z-10">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-900 border border-gray-800 text-sm font-semibold">
-                        <span class="w-2 h-2 rounded-full bg-neon-green animate-pulse"></span>
-                        <span class="text-gray-300">Accepting New Clients</span>
-                    </div>
-                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-heading font-bold text-white uppercase leading-tight">
-                        Transform Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-red to-orange-500">Physique</span><br>
-                        Elevate Your Mind.
-                    </h1>
-                    <p class="text-lg sm:text-xl text-gray-400 max-w-lg leading-relaxed">
-                        Join an elite community dedicated to real results. Expert guidance, tailored programming, and relentless motivation from Minte Fitness Coach.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                        <a href="#contact" class="bg-neon-red text-white px-8 py-4 rounded-md font-heading font-bold text-lg text-center hover:bg-red-600 transition-colors uppercase tracking-widest shadow-[0_0_15px_rgba(255,49,49,0.4)] hover:shadow-[0_0_25px_rgba(255,49,49,0.6)]">
-                            Start Your Journey
-                        </a>
-                        <a href="#services" class="bg-transparent border-2 border-gray-700 text-white px-8 py-4 rounded-md font-heading font-bold text-lg text-center hover:bg-gray-800 transition-colors uppercase tracking-widest">
-                            View Services
-                        </a>
-                    </div>
-                </div>
+        <!-- Hero Gradient Overlays for Deep Contrast and Text Readability -->
+        <div class="absolute inset-0 bg-gradient-to-b from-neutral-950/80 via-neutral-950/60 to-neutral-950 z-10 pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-neutral-950/90 via-neutral-950/50 to-neutral-950/90 z-10 pointer-events-none"></div>
 
-                <div class="hidden lg:flex justify-center items-center relative z-10">
-                    <div class="relative w-full max-w-md">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-neon-green to-neon-red rounded-2xl transform rotate-3 scale-105 opacity-20 blur-xl"></div>
-                        <img src="menu.jpg" alt="Minte Fitness Coach" class="relative rounded-2xl shadow-2xl object-cover border border-gray-800 w-full h-[600px] object-top">
-                        
-                        <div class="absolute -bottom-6 -left-6 bg-gray-900 p-4 rounded-xl border border-gray-800 shadow-2xl flex items-center gap-4">
-                            <div class="bg-gray-800 p-3 rounded-full text-neon-green">
-                                <i class="fab fa-tiktok text-2xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-white font-bold font-heading text-xl">34.9K+</p>
-                                <p class="text-xs text-gray-400 uppercase tracking-wide">Followers</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="py-24 bg-gray-900 border-t border-gray-900 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-heading font-bold text-white uppercase mb-4 text-glow">The Coach Behind The Reps</h2>
-                <div class="w-24 h-1 bg-neon-green mx-auto"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div class="order-2 md:order-1 relative group">
-                    <img src="menu.jpg" alt="Minte - ብረት ገፊ" class="rounded-lg shadow-xl w-full max-w-md mx-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
-                    <div class="absolute inset-0 border-2 border-neon-red rounded-lg transform translate-x-4 translate-y-4 -z-10 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
-                </div>
-                <div class="order-1 md:order-2 space-y-6">
-                    <h3 class="text-3xl font-heading font-bold text-white">@minte.fitnesscoach</h3>
-                    <p class="text-2xl text-neon-green font-semibold">ብረት ገፊ</p>
-                    <p class="text-gray-400 leading-relaxed text-lg">
-                        I am dedicated to helping individuals crush their limits and achieve the physique they've always dreamed of. With a deep passion for bodybuilding and functional fitness, my approach combines science-based programming with intense, focused motivation.
-                    </p>
-                    <p class="text-gray-400 leading-relaxed text-lg">
-                        Whether you are looking to build raw strength, shed body fat, or prepare for the stage, I provide the tools and accountability you need. Join a massive community of over <strong>34.9K followers</strong> and <strong>408.2K likes</strong> who trust the process.
-                    </p>
-                    
-                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-gray-800">
-                        <div class="text-center">
-                            <span class="block text-3xl font-heading font-bold text-white">34.9K</span>
-                            <span class="text-xs text-gray-500 uppercase tracking-widest">Followers</span>
-                        </div>
-                        <div class="text-center border-l border-r border-gray-800">
-                            <span class="block text-3xl font-heading font-bold text-white">408.2K</span>
-                            <span class="text-xs text-gray-500 uppercase tracking-widest">Likes</span>
-                        </div>
-                        <div class="text-center">
-                            <span class="block text-3xl font-heading font-bold text-white">100%</span>
-                            <span class="text-xs text-gray-500 uppercase tracking-widest">Commitment</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="services" class="py-24 bg-gray-950 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-heading font-bold text-white uppercase mb-4">Training Programs</h2>
-                <div class="w-24 h-1 bg-neon-red mx-auto mb-6"></div>
-                <p class="text-gray-400 max-w-2xl mx-auto">Select the tier that fits your goals. From fully customized 1-on-1 coaching to community-driven subscriptions.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Service Card 1 -->
-                <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 hover:border-neon-green transition-all duration-300 group hover:-translate-y-2">
-                    <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mb-6 group-hover:bg-neon-green/20 transition-colors">
-                        <i class="fas fa-dumbbell text-2xl text-gray-400 group-hover:text-neon-green transition-colors"></i>
-                    </div>
-                    <h3 class="text-2xl font-heading font-bold text-white mb-3">Personal Training</h3>
-                    <p class="text-gray-400 mb-6">In-person, high-intensity sessions focused on form, progressive overload, and breaking plateaus. Perfect for local clients demanding direct oversight.</p>
-                    <ul class="space-y-3 mb-8 text-sm text-gray-300">
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-neon-green"></i> 1-on-1 Form Correction</li>
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-neon-green"></i> Gym Equipment Access</li>
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-neon-green"></i> Direct Motivation</li>
-                    </ul>
-                    <a href="#contact" class="block w-full text-center bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 rounded-lg transition-colors uppercase text-sm tracking-wide">Inquire Now</a>
-                </div>
-
-                <!-- Service Card 2 - Highlighted -->
-                <div class="bg-gray-900 border-2 border-neon-red rounded-2xl p-8 relative transform md:-translate-y-4 shadow-[0_0_30px_rgba(255,49,49,0.15)]">
-                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-neon-red text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
-                        Most Popular
-                    </div>
-                    <div class="w-16 h-16 bg-red-900/30 rounded-full flex items-center justify-center mb-6">
-                        <i class="fas fa-laptop-code text-2xl text-neon-red"></i>
-                    </div>
-                    <h3 class="text-2xl font-heading font-bold text-white mb-3">Online Coaching</h3>
-                    <p class="text-gray-400 mb-6">Comprehensive digital coaching tailored to your lifestyle. Weekly check-ins, custom macros, and a personalized workout regimen delivered to your phone.</p>
-                    <ul class="space-y-3 mb-8 text-sm text-gray-300">
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-neon-red"></i> Custom Workout Plan</li>
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-neon-red"></i> Nutritional Guidance</li>
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-neon-red"></i> 24/7 WhatsApp Support</li>
-                    </ul>
-                    <a href="#contact" class="block w-full text-center bg-neon-red hover:bg-red-600 text-white font-bold py-3 rounded-lg transition-colors uppercase text-sm tracking-wide shadow-[0_0_15px_rgba(255,49,49,0.3)]">Start Today</a>
-                </div>
-
-                <!-- Service Card 3 -->
-                <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 hover:border-neon-green transition-all duration-300 group hover:-translate-y-2">
-                    <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mb-6 group-hover:bg-neon-green/20 transition-colors">
-                        <i class="fas fa-star text-2xl text-gray-400 group-hover:text-neon-green transition-colors"></i>
-                    </div>
-                    <h3 class="text-2xl font-heading font-bold text-white mb-3">Premium Subscription</h3>
-                    <p class="text-gray-400 mb-6">Join my exclusive inner circle. Get monthly updated training templates, recipe guides, and access to private live Q&A sessions.</p>
-                    <ul class="space-y-3 mb-8 text-sm text-gray-300">
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-neon-green"></i> Monthly Training Templates</li>
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-neon-green"></i> Video Exercise Library</li>
-                        <li class="flex items-center gap-2"><i class="fas fa-check text-neon-green"></i> Private Community Access</li>
-                    </ul>
-                    <a href="#contact" class="block w-full text-center bg-neon-green text-gray-900 hover:bg-green-400 font-bold py-3 rounded-lg transition-colors uppercase text-sm tracking-wide glow-button">Subscribe</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="transformations" class="py-24 bg-gray-950 border-t border-gray-900 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-heading font-bold text-white uppercase mb-4 text-glow">Client Transformations</h2>
-                <div class="w-24 h-1 bg-neon-green mx-auto mb-6"></div>
-                <p class="text-gray-400 max-w-2xl mx-auto">Real people, real results. See what happens when dedication meets expert programming.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Transformation 1 -->
-                <div class="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-neon-green transition-all duration-300 group">
-                    <div class="flex h-64">
-                        <div class="w-1/2 relative border-r border-gray-800">
-                            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" alt="Before">
-                            <span class="absolute bottom-2 left-2 bg-black/80 text-gray-300 text-xs px-2 py-1 rounded font-bold uppercase">Before</span>
-                        </div>
-                        <div class="w-1/2 relative">
-                            <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" alt="After">
-                            <span class="absolute bottom-2 right-2 bg-neon-green text-black font-bold text-xs px-2 py-1 rounded uppercase shadow-[0_0_10px_rgba(57,255,20,0.5)]">After</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="text-xl font-heading font-bold text-white mb-2">12-Week Lean Bulk</h4>
-                        <p class="text-gray-400 text-sm">Gained 8 lbs of lean muscle tissue while maintaining a low body fat percentage through a customized caloric surplus.</p>
-                    </div>
-                </div>
-
-                <!-- Transformation 2 -->
-                <div class="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-neon-red transition-all duration-300 group">
-                    <div class="flex h-64">
-                        <div class="w-1/2 relative border-r border-gray-800">
-                            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" alt="Before">
-                            <span class="absolute bottom-2 left-2 bg-black/80 text-gray-300 text-xs px-2 py-1 rounded font-bold uppercase">Before</span>
-                        </div>
-                        <div class="w-1/2 relative">
-                            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" alt="After">
-                            <span class="absolute bottom-2 right-2 bg-neon-red text-white font-bold text-xs px-2 py-1 rounded uppercase shadow-[0_0_10px_rgba(255,49,49,0.5)]">After</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="text-xl font-heading font-bold text-white mb-2">16-Week Fat Shred</h4>
-                        <p class="text-gray-400 text-sm">Dropped 18 lbs of fat and revealed deep abdominal definition using our high-intensity online coaching program.</p>
-                    </div>
-                </div>
-
-                <!-- Transformation 3 -->
-                <div class="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-neon-green transition-all duration-300 group md:col-span-2 lg:col-span-1">
-                    <div class="flex h-64">
-                        <div class="w-1/2 relative border-r border-gray-800">
-                            <img src="https://images.unsplash.com/photo-1526506114642-99933ee64c5e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" alt="Before">
-                            <span class="absolute bottom-2 left-2 bg-black/80 text-gray-300 text-xs px-2 py-1 rounded font-bold uppercase">Before</span>
-                        </div>
-                        <div class="w-1/2 relative">
-                            <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" alt="After">
-                            <span class="absolute bottom-2 right-2 bg-neon-green text-black font-bold text-xs px-2 py-1 rounded uppercase shadow-[0_0_10px_rgba(57,255,20,0.5)]">After</span>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="text-xl font-heading font-bold text-white mb-2">Strength Recomp</h4>
-                        <p class="text-gray-400 text-sm">A total body recomposition. Lost fat while simultaneously building serious strength and muscle mass over 6 months.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="gallery" class="py-24 bg-gray-900 border-t border-gray-800 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-heading font-bold text-white uppercase mb-4">Inside The Grind</h2>
-                <div class="w-24 h-1 bg-neon-red mx-auto mb-6"></div>
-                <p class="text-gray-400 max-w-2xl mx-auto">A glimpse into the daily relentless pursuit of greatness.</p>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
-                <div class="col-span-2 row-span-2 relative group overflow-hidden rounded-xl bg-gray-800">
-                    <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Gym Workout">
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent opacity-60"></div>
-                    <div class="absolute bottom-0 left-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                        <p class="text-neon-green font-bold uppercase tracking-wider text-sm">Heavy Deadlifts</p>
-                    </div>
-                </div>
-
-                <div class="relative group overflow-hidden rounded-xl bg-gray-800">
-                    <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Dumbbells">
-                </div>
-
-                <div class="relative group overflow-hidden rounded-xl bg-gray-800">
-                    <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Coach motivation">
-                </div>
-
-                <div class="col-span-2 md:col-span-1 row-span-2 relative group overflow-hidden rounded-xl bg-gray-800">
-                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Pushups">
-                </div>
-
-                <div class="relative group overflow-hidden rounded-xl bg-gray-800">
-                    <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Training">
-                </div>
-
-                <div class="relative group overflow-hidden rounded-xl bg-gray-800">
-                    <img src="https://images.unsplash.com/photo-1526506114642-99933ee64c5e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Equipment">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="py-24 bg-gray-950 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
-                <div class="space-y-8">
-                    <div>
-                        <h2 class="text-4xl font-heading font-bold text-white uppercase mb-4">Ready To Commit?</h2>
-                        <p class="text-gray-400 text-lg">Reach out directly via phone or drop a message below. Let's discuss your goals and how we can obliterate them.</p>
-                    </div>
+                <!-- Hero Left Content -->
+                <div class="lg:col-span-7 text-center lg:text-left space-y-8">
                     
-                    <div class="bg-gray-950 p-8 rounded-xl border border-gray-800 inline-block w-full">
-                        <p class="text-sm text-gray-500 uppercase tracking-widest mb-2">Direct Line</p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center border border-gray-700">
-                                <i class="fas fa-phone-alt text-neon-green text-xl"></i>
+                    <!-- Social Proof Badge -->
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-900/90 border border-neutral-800 backdrop-blur-md shadow-lg">
+                        <span class="w-2.5 h-2.5 rounded-full bg-brand-green animate-ping"></span>
+                        <i class="fab fa-tiktok text-brand-red text-sm"></i>
+                        <span class="text-xs sm:text-sm font-semibold text-neutral-200">
+                            34.9K TikTok Followers • 408.2K Likes • <span class="text-brand-gold font-bold">ብረት ጎፊ</span>
+                        </span>
+                    </div>
+
+                    <!-- Main Headline -->
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-heading font-extrabold uppercase text-white leading-none tracking-tight">
+                        Transform Your Body <br class="hidden sm:inline">With <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-green via-emerald-400 to-brand-gold">Minte Fitness</span>
+                    </h1>
+
+                    <!-- Subtitle -->
+                    <p class="text-base sm:text-xl text-neutral-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Dedicated strength & bodybuilding coaching by Minte. Personalized workout regimens, custom nutritional strategies, and unyielding accountability to sculpt your peak physique.
+                    </p>
+
+                    <!-- Quick Stats Cards -->
+                    <div class="grid grid-cols-3 gap-3 sm:gap-6 pt-2 max-w-lg mx-auto lg:mx-0">
+                        <div class="bg-neutral-900/80 border border-neutral-800 p-3 sm:p-4 rounded-xl text-center backdrop-blur-sm">
+                            <span class="block text-2xl sm:text-3xl font-heading font-bold text-brand-green">500+</span>
+                            <span class="text-[11px] sm:text-xs text-neutral-400 uppercase font-medium">Clients</span>
+                        </div>
+                        <div class="bg-neutral-900/80 border border-neutral-800 p-3 sm:p-4 rounded-xl text-center backdrop-blur-sm">
+                            <span class="block text-2xl sm:text-3xl font-heading font-bold text-brand-gold">6+ Yrs</span>
+                            <span class="text-[11px] sm:text-xs text-neutral-400 uppercase font-medium">Experience</span>
+                        </div>
+                        <div class="bg-neutral-900/80 border border-neutral-800 p-3 sm:p-4 rounded-xl text-center backdrop-blur-sm">
+                            <span class="block text-2xl sm:text-3xl font-heading font-bold text-brand-red">98%</span>
+                            <span class="text-[11px] sm:text-xs text-neutral-400 uppercase font-medium">Success Rate</span>
+                        </div>
+                    </div>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <button onclick="openBookingModal('Hero Start Transformation')" class="w-full sm:w-auto px-8 py-4 bg-brand-green text-neutral-950 font-heading font-bold text-lg rounded-xl uppercase tracking-wider hover:bg-green-400 transition-colors glow-green flex items-center justify-center gap-3">
+                            <i class="fas fa-fire"></i>
+                            <span>Start Transformation</span>
+                        </button>
+                        <a href="tel:0988714114" class="w-full sm:w-auto px-8 py-4 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-white font-heading font-bold text-lg rounded-xl uppercase tracking-wider transition-colors flex items-center justify-center gap-3">
+                            <i class="fas fa-phone-alt text-brand-green"></i>
+                            <span>Call 0988714114</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Right Media Card -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-full max-w-sm sm:max-w-md">
+                        <!-- Neon Glow Ring Backing -->
+                        <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-green via-brand-gold to-brand-red rounded-3xl blur-xl opacity-50 animate-pulse"></div>
+                        
+                        <!-- Main Coach Avatar Card -->
+                        <div class="relative rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-2xl">
+                            <img src="9235_3d5833.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop'" alt="Minte Fitness Coach Profile" class="w-full h-[450px] sm:h-[520px] object-cover object-top">
+                            
+                            <div class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent"></div>
+                            
+                            <div class="absolute bottom-0 inset-x-0 p-6 space-y-2 text-left">
+                                <div class="flex items-center justify-between">
+                                    <span class="px-3 py-1 bg-brand-green text-black font-bold text-xs uppercase rounded-md tracking-wider">Verified Head Coach</span>
+                                    <a href="https://tiktok.com/@minte.fitnesscoach" target="_blank" rel="noopener" class="text-white hover:text-brand-green text-xl"><i class="fab fa-tiktok"></i></a>
+                                </div>
+                                <h3 class="text-2xl font-heading font-bold text-white uppercase">Minte • ብረት ጎፊ</h3>
+                                <p class="text-xs text-neutral-300">Certified Bodybuilding & Elite Strength Trainer • Ethiopia</p>
                             </div>
-                            <a href="tel:0988714114" class="text-4xl md:text-5xl font-heading font-bold text-white hover:text-neon-green transition-colors">
-                                0988714114
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-24 bg-neutral-950 border-t border-neutral-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-5 relative">
+                    <div class="glass-card p-4 rounded-2xl border border-neutral-800">
+                        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800&auto=format&fit=crop" alt="Minte Coaching" class="rounded-xl w-full h-[400px] object-cover">
+                        <div class="mt-4 p-4 rounded-xl bg-neutral-900/90 border border-neutral-800 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-neutral-400 uppercase">Direct WhatsApp & Phone</p>
+                                <p class="text-lg font-heading font-bold text-brand-green">0988714114</p>
+                            </div>
+                            <a href="tel:0988714114" class="w-10 h-10 rounded-full bg-brand-green text-black flex items-center justify-center font-bold">
+                                <i class="fas fa-phone"></i>
                             </a>
                         </div>
                     </div>
+                </div>
 
-                    <div class="space-y-4">
-                        <p class="text-sm text-gray-500 uppercase tracking-widest">Connect on Socials</p>
-                        <a href="https://tiktok.com/@minte.fitnesscoach" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors">
-                            <i class="fab fa-tiktok text-xl text-neon-red"></i>
-                            <span class="font-semibold">@minte.fitnesscoach</span>
-                        </a>
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-neutral-900 border border-neutral-800 text-xs font-bold text-brand-green uppercase tracking-widest">
+                        About The Coach
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-heading font-bold uppercase text-white leading-tight">
+                        Built On Discipline, Driven By <span class="text-brand-green">Real Results</span>
+                    </h2>
+                    <p class="text-neutral-300 leading-relaxed text-base sm:text-lg">
+                        Known widely as <strong class="text-white font-bold">ብረት ጎፊ</strong> on social media, Coach Minte has established himself as one of Ethiopia's premier personal trainers and online fitness mentors. With over 6 years of hands-on experience training hundreds of individuals, Minte brings a disciplined, science-backed approach to muscle building, body recomposition, and fat loss.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="bg-neutral-900/60 p-4 rounded-xl border border-neutral-800 flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-green text-xl pt-0.5"></i>
+                            <div>
+                                <h4 class="font-heading font-bold text-white uppercase text-base">Custom Nutrition</h4>
+                                <p class="text-xs text-neutral-400">Tailored meal plans using accessible local foods & macros.</p>
+                            </div>
+                        </div>
+                        <div class="bg-neutral-900/60 p-4 rounded-xl border border-neutral-800 flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-green text-xl pt-0.5"></i>
+                            <div>
+                                <h4 class="font-heading font-bold text-white uppercase text-base">Progressive Overload</h4>
+                                <p class="text-xs text-neutral-400">Structured gym & home programs engineered for maximum growth.</p>
+                            </div>
+                        </div>
+                        <div class="bg-neutral-900/60 p-4 rounded-xl border border-neutral-800 flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-green text-xl pt-0.5"></i>
+                            <div>
+                                <h4 class="font-heading font-bold text-white uppercase text-base">1-on-1 Guidance</h4>
+                                <p class="text-xs text-neutral-400">Daily check-ins, form checks, and relentless accountability.</p>
+                            </div>
+                        </div>
+                        <div class="bg-neutral-900/60 p-4 rounded-xl border border-neutral-800 flex items-start gap-3">
+                            <i class="fas fa-check-circle text-brand-green text-xl pt-0.5"></i>
+                            <div>
+                                <h4 class="font-heading font-bold text-white uppercase text-base">Body Recomposition</h4>
+                                <p class="text-xs text-neutral-400">Burn fat while simultaneously sculpting dense lean muscle.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button onclick="openBookingModal('About Section Consultation')" class="px-8 py-3.5 bg-brand-green text-neutral-950 font-heading font-bold uppercase rounded-xl hover:bg-green-400 transition-colors glow-green">
+                            Book Free Consultation
+                        </button>
                     </div>
                 </div>
 
-                <div class="bg-gray-950 p-8 rounded-2xl border border-gray-800 shadow-xl">
-                    <h3 class="text-2xl font-heading font-bold text-white mb-6 uppercase">Send a Message</h3>
-                    <form id="contact-form" class="space-y-6">
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
-                            <input type="text" id="name" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-neon-green focus:ring-1 focus:ring-neon-green transition-colors">
-                        </div>
-                        <div>
-                            <label for="phone" class="block text-sm font-medium text-gray-400 mb-2">Phone Number</label>
-                            <input type="tel" id="phone" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-neon-green focus:ring-1 focus:ring-neon-green transition-colors">
-                        </div>
-                        <div>
-                            <label for="goal" class="block text-sm font-medium text-gray-400 mb-2">Primary Goal</label>
-                            <select id="goal" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-neon-green focus:ring-1 focus:ring-neon-green transition-colors appearance-none">
-                                <option>Muscle Building (Hypertrophy)</option>
-                                <option>Fat Loss / Cutting</option>
-                                <option>Strength & Conditioning</option>
-                                <option>Subscription Info</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="message" class="block text-sm font-medium text-gray-400 mb-2">Message</label>
-                            <textarea id="message" rows="4" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-neon-green focus:ring-1 focus:ring-neon-green transition-colors"></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-neon-red hover:bg-red-600 text-white font-bold py-4 rounded-lg transition-colors uppercase tracking-widest text-lg shadow-[0_0_15px_rgba(255,49,49,0.3)]">
-                            Submit Request
-                        </button>
-                    </form>
-                </div>
-                
             </div>
         </div>
     </section>
 
-    <footer class="bg-black py-8 border-t border-gray-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-2">
-                <span class="font-heading text-xl font-bold text-white uppercase">Minte<span class="text-neon-red">.</span>Fit</span>
+    <!-- TRANSFORMATIONS SECTION -->
+    <section id="transformations" class="py-24 bg-neutral-900/50 border-t border-neutral-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold text-brand-green uppercase tracking-widest bg-neutral-900 border border-neutral-800 px-3 py-1 rounded-md">
+                    Proven Results
+                </span>
+                <h2 class="text-4xl sm:text-5xl font-heading font-bold uppercase text-white mt-3">
+                    Client Transformations
+                </h2>
+                <p class="text-neutral-400 text-base sm:text-lg mt-3">
+                    Drag the sliders to see the real physical changes achieved by Coach Minte's clients.
+                </p>
             </div>
-            <p class="text-gray-500 text-sm">
-                &copy; 2026 Minte Fitness Coach. All rights reserved. <br class="md:hidden"> 
-                <span class="hidden md:inline">|</span> ብረት ገፊ
+
+            <!-- Transformation Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Transformation Card 1 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-neutral-800 flex flex-col justify-between">
+                    <div>
+                        <!-- Interactive Before/After Slider -->
+                        <div class="ba-container h-80 w-full" id="ba-1">
+                            <!-- Before Image (Base) -->
+                            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="Before">
+                            <span class="absolute top-3 left-3 z-10 bg-black/80 border border-neutral-700 text-xs text-neutral-300 font-bold px-2.5 py-1 rounded-md uppercase">Before • 88kg</span>
+                            
+                            <!-- After Image (Overlay Top) -->
+                            <div class="ba-after" id="ba-after-1">
+                                <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop" class="absolute top-0 left-0 w-full h-full max-w-none object-cover" style="width: 100%;" id="ba-img-1" alt="After">
+                                <span class="absolute top-3 left-3 z-10 bg-brand-green text-black font-bold text-xs px-2.5 py-1 rounded-md uppercase">After • 74kg</span>
+                            </div>
+
+                            <!-- Slider Bar -->
+                            <div class="ba-slider" id="ba-slider-1">
+                                <div class="ba-slider-handle"><i class="fas fa-arrows-alt-h"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-3">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-xl font-heading font-bold text-white uppercase">Abebe K.</h3>
+                                <span class="text-xs font-bold text-brand-green bg-brand-green/10 border border-brand-green/30 px-2.5 py-1 rounded-full">12 Weeks</span>
+                            </div>
+                            <p class="text-sm font-semibold text-brand-gold">-14kg Fat Loss & Shredded Abs</p>
+                            <p class="text-xs text-neutral-400 italic">"Coach Minte's diet strategy was extremely easy to follow with traditional foods. Changed my life!"</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-0">
+                        <button onclick="openBookingModal('Transformation 1')" class="w-full py-2.5 bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-colors">
+                            Get Similar Results
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Transformation Card 2 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-neutral-800 flex flex-col justify-between">
+                    <div>
+                        <!-- Interactive Before/After Slider -->
+                        <div class="ba-container h-80 w-full" id="ba-2">
+                            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="Before">
+                            <span class="absolute top-3 left-3 z-10 bg-black/80 border border-neutral-700 text-xs text-neutral-300 font-bold px-2.5 py-1 rounded-md uppercase">Before • Lean</span>
+                            
+                            <div class="ba-after" id="ba-after-2">
+                                <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=600&auto=format&fit=crop" class="absolute top-0 left-0 w-full h-full max-w-none object-cover" style="width: 100%;" id="ba-img-2" alt="After">
+                                <span class="absolute top-3 left-3 z-10 bg-brand-green text-black font-bold text-xs px-2.5 py-1 rounded-md uppercase">After • Mass</span>
+                            </div>
+
+                            <div class="ba-slider" id="ba-slider-2">
+                                <div class="ba-slider-handle"><i class="fas fa-arrows-alt-h"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-3">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-xl font-heading font-bold text-white uppercase">Dawit M.</h3>
+                                <span class="text-xs font-bold text-brand-green bg-brand-green/10 border border-brand-green/30 px-2.5 py-1 rounded-full">16 Weeks</span>
+                            </div>
+                            <p class="text-sm font-semibold text-brand-gold">+7kg Clean Muscle Bulk</p>
+                            <p class="text-xs text-neutral-400 italic">"I was a hardgainer for years until Minte taught me real progressive overload principles."</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-0">
+                        <button onclick="openBookingModal('Transformation 2')" class="w-full py-2.5 bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-colors">
+                            Get Similar Results
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Transformation Card 3 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-neutral-800 flex flex-col justify-between">
+                    <div>
+                        <!-- Interactive Before/After Slider -->
+                        <div class="ba-container h-80 w-full" id="ba-3">
+                            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="Before">
+                            <span class="absolute top-3 left-3 z-10 bg-black/80 border border-neutral-700 text-xs text-neutral-300 font-bold px-2.5 py-1 rounded-md uppercase">Before</span>
+                            
+                            <div class="ba-after" id="ba-after-3">
+                                <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=600&auto=format&fit=crop" class="absolute top-0 left-0 w-full h-full max-w-none object-cover" style="width: 100%;" id="ba-img-3" alt="After">
+                                <span class="absolute top-3 left-3 z-10 bg-brand-green text-black font-bold text-xs px-2.5 py-1 rounded-md uppercase">After</span>
+                            </div>
+
+                            <div class="ba-slider" id="ba-slider-3">
+                                <div class="ba-slider-handle"><i class="fas fa-arrows-alt-h"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-3">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-xl font-heading font-bold text-white uppercase">Sami T.</h3>
+                                <span class="text-xs font-bold text-brand-green bg-brand-green/10 border border-brand-green/30 px-2.5 py-1 rounded-full">20 Weeks</span>
+                            </div>
+                            <p class="text-sm font-semibold text-brand-gold">Total Body Recomposition</p>
+                            <p class="text-xs text-neutral-400 italic">"Lost visceral belly fat while my chest and arms doubled in size. Unbelievable coaching."</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-0">
+                        <button onclick="openBookingModal('Transformation 3')" class="w-full py-2.5 bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-colors">
+                            Get Similar Results
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PHOTO GALLERY SECTION -->
+    <section id="gallery" class="py-24 bg-neutral-950 border-t border-neutral-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-bold text-brand-gold uppercase tracking-widest bg-neutral-900 border border-neutral-800 px-3 py-1 rounded-md">
+                    Photo Showcase
+                </span>
+                <h2 class="text-4xl sm:text-5xl font-heading font-bold uppercase text-white mt-3">
+                    Gallery & Action Shots
+                </h2>
+                <p class="text-neutral-400 text-base mt-2">Explore training routines, physique updates, and gym culture.</p>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-10">
+                <button class="gallery-filter-btn px-5 py-2 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all bg-brand-green text-black" data-filter="all">All</button>
+                <button class="gallery-filter-btn px-5 py-2 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all bg-neutral-900 text-neutral-300 hover:bg-neutral-800 border border-neutral-800" data-filter="workouts">Workouts</button>
+                <button class="gallery-filter-btn px-5 py-2 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all bg-neutral-900 text-neutral-300 hover:bg-neutral-800 border border-neutral-800" data-filter="training">Coaching</button>
+                <button class="gallery-filter-btn px-5 py-2 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all bg-neutral-900 text-neutral-300 hover:bg-neutral-800 border border-neutral-800" data-filter="competitions">Physique</button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-grid">
+                
+                <div class="gallery-item workouts relative group overflow-hidden rounded-xl bg-neutral-900 border border-neutral-800 aspect-square cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1200&auto=format&fit=crop', 'Heavy Barbell Training Session')">
+                    <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Heavy Barbell Training">
+                    <div class="absolute inset-0 bg-neutral-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                        <span class="text-xs text-brand-green font-bold uppercase">Workouts</span>
+                        <p class="text-sm font-heading font-bold text-white">Heavy Barbell Training</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item training relative group overflow-hidden rounded-xl bg-neutral-900 border border-neutral-800 aspect-square cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1200&auto=format&fit=crop', '1-on-1 Personal Form Coaching')">
+                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="1-on-1 Coaching">
+                    <div class="absolute inset-0 bg-neutral-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                        <span class="text-xs text-brand-gold font-bold uppercase">Coaching</span>
+                        <p class="text-sm font-heading font-bold text-white">1-on-1 Form Coaching</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item competitions relative group overflow-hidden rounded-xl bg-neutral-900 border border-neutral-800 aspect-square cursor-pointer" onclick="openLightbox('9235_3d5833.jpg', 'Coach Minte Stage & Physique Presentation')">
+                    <img src="9235_3d5833.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=600&auto=format&fit=crop'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Coach Minte Stage Presentation">
+                    <div class="absolute inset-0 bg-neutral-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                        <span class="text-xs text-brand-red font-bold uppercase">Physique</span>
+                        <p class="text-sm font-heading font-bold text-white">Stage Presentation</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item workouts relative group overflow-hidden rounded-xl bg-neutral-900 border border-neutral-800 aspect-square cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop', 'Dumbbell Hypertrophy Set')">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Dumbbell Workout">
+                    <div class="absolute inset-0 bg-neutral-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                        <span class="text-xs text-brand-green font-bold uppercase">Workouts</span>
+                        <p class="text-sm font-heading font-bold text-white">Dumbbell Hypertrophy</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item training relative group overflow-hidden rounded-xl bg-neutral-900 border border-neutral-800 aspect-square cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200&auto=format&fit=crop', 'Client Muscle Recomp Evaluation')">
+                    <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Client Evaluation">
+                    <div class="absolute inset-0 bg-neutral-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                        <span class="text-xs text-brand-gold font-bold uppercase">Coaching</span>
+                        <p class="text-sm font-heading font-bold text-white">Recomp Evaluation</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item workouts relative group overflow-hidden rounded-xl bg-neutral-900 border border-neutral-800 aspect-square cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=1200&auto=format&fit=crop', 'Calisthenics & Core Power')">
+                    <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Calisthenics">
+                    <div class="absolute inset-0 bg-neutral-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                        <span class="text-xs text-brand-green font-bold uppercase">Workouts</span>
+                        <p class="text-sm font-heading font-bold text-white">Core & Bodyweight</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item competitions relative group overflow-hidden rounded-xl bg-neutral-900 border border-neutral-800 aspect-square cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1526506114642-99933ee64c5e?q=80&w=1200&auto=format&fit=crop', 'Peak Conditioning Check')">
+                    <img src="https://images.unsplash.com/photo-1526506114642-99933ee64c5e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Conditioning">
+                    <div class="absolute inset-0 bg-neutral-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                        <span class="text-xs text-brand-red font-bold uppercase">Physique</span>
+                        <p class="text-sm font-heading font-bold text-white">Conditioning Check</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item training relative group overflow-hidden rounded-xl bg-neutral-900 border border-neutral-800 aspect-square cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1200&auto=format&fit=crop', 'Post Workout Recovery & Checkin')">
+                    <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Recovery">
+                    <div class="absolute inset-0 bg-neutral-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                        <span class="text-xs text-brand-gold font-bold uppercase">Coaching</span>
+                        <p class="text-sm font-heading font-bold text-white">Recovery Strategy</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- TIKTOK CONTENT SPOTLIGHT SECTION -->
+    <section id="tiktok" class="py-24 bg-neutral-900/60 border-t border-neutral-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div>
+                    <span class="text-xs font-bold text-brand-red uppercase tracking-widest bg-neutral-900 border border-neutral-800 px-3 py-1 rounded-md">
+                        Social Feed
+                    </span>
+                    <h2 class="text-4xl sm:text-5xl font-heading font-bold uppercase text-white mt-3">
+                        TikTok Spotlight (@minte.fitnesscoach)
+                    </h2>
+                    <p class="text-neutral-400 text-base mt-2">Join over 34.9K followers getting daily workout tips, motivation, and exercise breakdowns.</p>
+                </div>
+                <a href="https://tiktok.com/@minte.fitnesscoach" target="_blank" rel="noopener" class="inline-flex items-center gap-3 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-white font-heading font-bold px-6 py-3 rounded-xl uppercase transition-colors self-start md:self-auto">
+                    <i class="fab fa-tiktok text-brand-red text-xl"></i>
+                    <span>Follow On TikTok</span>
+                </a>
+            </div>
+
+            <!-- TikTok Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                
+                <!-- Pinned Post 1 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-neutral-800 group hover:border-brand-red transition-all">
+                    <div class="relative h-80">
+                        <img src="9235_3d5833.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=400&auto=format&fit=crop'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Pinned TikTok">
+                        <div class="absolute top-3 left-3 bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Pinned</div>
+                        <div class="absolute bottom-3 left-3 flex items-center gap-1.5 text-white bg-black/70 px-2.5 py-1 rounded-md text-xs font-bold backdrop-blur-md">
+                            <i class="fas fa-play text-[10px]"></i> 390.8K
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-neutral-300 font-semibold line-clamp-2">How to build chest upper fibers effectively with dumbbells #fitness #ethiopia</p>
+                    </div>
+                </div>
+
+                <!-- Pinned Post 2 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-neutral-800 group hover:border-brand-red transition-all">
+                    <div class="relative h-80">
+                        <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Pinned TikTok">
+                        <div class="absolute top-3 left-3 bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Pinned</div>
+                        <div class="absolute bottom-3 left-3 flex items-center gap-1.5 text-white bg-black/70 px-2.5 py-1 rounded-md text-xs font-bold backdrop-blur-md">
+                            <i class="fas fa-play text-[10px]"></i> 461.6K
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-neutral-300 font-semibold line-clamp-2">Fat Burn vs Muscle Build mistake you must stop today! #habesha #fit</p>
+                    </div>
+                </div>
+
+                <!-- Pinned Post 3 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-neutral-800 group hover:border-brand-red transition-all">
+                    <div class="relative h-80">
+                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Pinned TikTok">
+                        <div class="absolute top-3 left-3 bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Pinned</div>
+                        <div class="absolute bottom-3 left-3 flex items-center gap-1.5 text-white bg-black/70 px-2.5 py-1 rounded-md text-xs font-bold backdrop-blur-md">
+                            <i class="fas fa-play text-[10px]"></i> 37.4K
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-neutral-300 font-semibold line-clamp-2">Full Meal Plan Guide for natural bodybuilders in Addis Ababa.</p>
+                    </div>
+                </div>
+
+                <!-- Post 4 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-neutral-800 group hover:border-brand-red transition-all">
+                    <div class="relative h-80">
+                        <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="TikTok Post">
+                        <div class="absolute bottom-3 left-3 flex items-center gap-1.5 text-white bg-black/70 px-2.5 py-1 rounded-md text-xs font-bold backdrop-blur-md">
+                            <i class="fas fa-play text-[10px]"></i> 25.7K
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-neutral-300 font-semibold line-clamp-2">Push-up variations for massive triceps & shoulder strength.</p>
+                    </div>
+                </div>
+
+                <!-- Post 5 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-neutral-800 group hover:border-brand-red transition-all">
+                    <div class="relative h-80">
+                        <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=400&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="TikTok Post">
+                        <div class="absolute bottom-3 left-3 flex items-center gap-1.5 text-white bg-black/70 px-2.5 py-1 rounded-md text-xs font-bold backdrop-blur-md">
+                            <i class="fas fa-play text-[10px]"></i> 11.9K
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-neutral-300 font-semibold line-clamp-2">Cable bicep curls vs barbell curls. Which gives peak biceps?</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CALCULATOR SECTION -->
+    <section id="calculator" class="py-24 bg-neutral-950 border-t border-neutral-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-xs font-bold text-brand-green uppercase tracking-widest bg-neutral-900 border border-neutral-800 px-3 py-1 rounded-md">
+                        Interactive Tool
+                    </span>
+                    <h2 class="text-4xl sm:text-5xl font-heading font-bold uppercase text-white leading-tight">
+                        Calculate Your <span class="text-brand-green">BMI & Daily Calories</span>
+                    </h2>
+                    <p class="text-neutral-300 leading-relaxed text-base">
+                        Get an instant scientific breakdown of your Body Mass Index (BMI) and estimated Total Daily Energy Expenditure (TDEE). Minte Fitness uses these exact figures to build your customized routine.
+                    </p>
+
+                    <div class="p-5 rounded-2xl bg-neutral-900 border border-neutral-800 space-y-3">
+                        <div class="flex items-center gap-3 text-brand-gold">
+                            <i class="fas fa-lightbulb text-xl"></i>
+                            <h4 class="font-heading font-bold text-white uppercase text-base">Why Metrics Matter</h4>
+                        </div>
+                        <p class="text-xs text-neutral-400 leading-normal">
+                            Without accurate caloric targets, you risk losing hard-earned muscle or stalling fat loss. Calculate your targets now and discuss them with Coach Minte!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7">
+                    <div class="glass-card p-6 sm:p-8 rounded-3xl border border-neutral-800 shadow-2xl">
+                        <form id="bmi-form" onsubmit="calculateFitness(event)" class="space-y-6">
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="gender" class="block text-xs font-bold uppercase text-neutral-400 mb-2">Gender</label>
+                                    <select id="gender" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="age" class="block text-xs font-bold uppercase text-neutral-400 mb-2">Age (Years)</label>
+                                    <input type="number" id="age" value="25" min="15" max="80" required class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="weight" class="block text-xs font-bold uppercase text-neutral-400 mb-2">Weight (kg)</label>
+                                    <input type="number" id="weight" value="75" min="30" max="200" required class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                                </div>
+                                <div>
+                                    <label for="height" class="block text-xs font-bold uppercase text-neutral-400 mb-2">Height (cm)</label>
+                                    <input type="number" id="height" value="175" min="120" max="220" required class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="activity" class="block text-xs font-bold uppercase text-neutral-400 mb-2">Activity Level</label>
+                                <select id="activity" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                                    <option value="1.2">Sedentary (Little to no exercise)</option>
+                                    <option value="1.375">Lightly Active (Exercise 1-3 days/wk)</option>
+                                    <option value="1.55" selected>Moderately Active (Exercise 3-5 days/wk)</option>
+                                    <option value="1.725">Very Active (Hard exercise 6-7 days/wk)</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 bg-brand-green text-neutral-950 font-heading font-bold uppercase tracking-wider text-base rounded-xl hover:bg-green-400 transition-colors glow-green">
+                                Calculate Fitness Results
+                            </button>
+                        </form>
+
+                        <!-- Calculation Results Output Card -->
+                        <div id="calc-results" class="mt-8 pt-6 border-t border-neutral-800 space-y-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="bg-neutral-900 p-4 rounded-xl text-center border border-neutral-800">
+                                    <span class="text-xs text-neutral-400 uppercase font-semibold">Your BMI</span>
+                                    <span id="res-bmi" class="block text-3xl font-heading font-bold text-brand-green mt-1">24.5</span>
+                                    <span id="res-category" class="text-[11px] font-bold text-brand-gold uppercase">Normal Weight</span>
+                                </div>
+                                <div class="bg-neutral-900 p-4 rounded-xl text-center border border-neutral-800">
+                                    <span class="text-xs text-neutral-400 uppercase font-semibold">Maintenance</span>
+                                    <span id="res-maintenance" class="block text-3xl font-heading font-bold text-white mt-1">2,450</span>
+                                    <span class="text-[11px] text-neutral-400 uppercase">kcal / day</span>
+                                </div>
+                                <div class="bg-neutral-900 p-4 rounded-xl text-center border border-neutral-800">
+                                    <span class="text-xs text-neutral-400 uppercase font-semibold">Fat Loss Goal</span>
+                                    <span id="res-fatloss" class="block text-3xl font-heading font-bold text-brand-red mt-1">1,950</span>
+                                    <span class="text-[11px] text-neutral-400 uppercase">kcal / day</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-neutral-900/90 p-4 rounded-xl border border-neutral-800 flex items-center justify-between gap-4">
+                                <div>
+                                    <span class="text-xs text-neutral-400 font-semibold uppercase">Recommended Program</span>
+                                    <p id="res-recommendation" class="text-sm font-heading font-bold text-white uppercase">Online Personal Coaching Program</p>
+                                </div>
+                                <button onclick="openBookingModal('Calculator Plan Result')" class="px-4 py-2 bg-brand-green text-black font-bold text-xs uppercase rounded-lg hover:bg-green-400">
+                                    Claim Plan
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PROGRAMS & PRICING SECTION -->
+    <section id="programs" class="py-24 bg-neutral-900/50 border-t border-neutral-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold text-brand-green uppercase tracking-widest bg-neutral-900 border border-neutral-800 px-3 py-1 rounded-md">
+                    Coaching Packages
+                </span>
+                <h2 class="text-4xl sm:text-5xl font-heading font-bold uppercase text-white mt-3">
+                    Choose Your Plan
+                </h2>
+                <p class="text-neutral-400 text-base sm:text-lg mt-3">
+                    Flexible options tailored for both local in-person gym sessions and worldwide online clients.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Package 1: Personal Training -->
+                <div class="glass-card rounded-3xl p-8 border border-neutral-800 flex flex-col justify-between hover:border-brand-green transition-all group">
+                    <div class="space-y-6">
+                        <div class="w-14 h-14 rounded-2xl bg-neutral-900 border border-neutral-700 flex items-center justify-center text-brand-green text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-brand-green uppercase">In-Person</span>
+                            <h3 class="text-2xl font-heading font-bold text-white uppercase mt-1">1-on-1 Gym Personal Training</h3>
+                            <p class="text-xs text-neutral-400 mt-2">Direct physical coaching sessions in Addis Ababa for maximum intensity & form mastery.</p>
+                        </div>
+                        <ul class="space-y-3 text-xs text-neutral-300">
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-green"></i> 1-on-1 In-Person Form Spotting</li>
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-green"></i> Custom Hypertrophy Routine</li>
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-green"></i> Local Diet & Meal Breakdown</li>
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-green"></i> Weekly Body Fat Measurement</li>
+                        </ul>
+                    </div>
+                    <div class="pt-8 space-y-4">
+                        <button onclick="openBookingModal('In-Person Personal Training')" class="w-full py-3.5 bg-neutral-800 hover:bg-neutral-700 text-white font-heading font-bold uppercase rounded-xl transition-colors tracking-wider">
+                            Book In-Person
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Package 2: Online Coaching (Highlighted) -->
+                <div class="glass-card rounded-3xl p-8 border-2 border-brand-green flex flex-col justify-between relative shadow-[0_0_30px_rgba(34,197,94,0.15)] bg-neutral-900/90">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-green text-neutral-950 px-4 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-md">
+                        Most Popular
+                    </div>
+                    <div class="space-y-6 pt-2">
+                        <div class="w-14 h-14 rounded-2xl bg-brand-green/10 border border-brand-green/30 flex items-center justify-center text-brand-green text-2xl">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-brand-gold uppercase">Remote Worldwide</span>
+                            <h3 class="text-2xl font-heading font-bold text-white uppercase mt-1">Full Online Coaching</h3>
+                            <p class="text-xs text-neutral-400 mt-2">Complete remote mentorship with Minte, wherever you are in Ethiopia or abroad.</p>
+                        </div>
+                        <ul class="space-y-3 text-xs text-neutral-200">
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-green"></i> Personalized Workout App / PDF</li>
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-green"></i> Custom Macro & Calorie Blueprint</li>
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-green"></i> Daily WhatsApp Video Form Feedback</li>
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-green"></i> Weekly Video Check-ins with Minte</li>
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-green"></i> 24/7 Priority Support</li>
+                        </ul>
+                    </div>
+                    <div class="pt-8 space-y-4">
+                        <button onclick="openBookingModal('Full Online Coaching')" class="w-full py-4 bg-brand-green text-neutral-950 font-heading font-bold uppercase rounded-xl hover:bg-green-400 transition-colors glow-green tracking-wider">
+                            Start Online Coaching
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Package 3: Subscription Membership -->
+                <div class="glass-card rounded-3xl p-8 border border-neutral-800 flex flex-col justify-between hover:border-brand-gold transition-all group">
+                    <div class="space-y-6">
+                        <div class="w-14 h-14 rounded-2xl bg-neutral-900 border border-neutral-700 flex items-center justify-center text-brand-gold text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-brand-gold uppercase">Inner Circle</span>
+                            <h3 class="text-2xl font-heading font-bold text-white uppercase mt-1">VIP Subscription Plan</h3>
+                            <p class="text-xs text-neutral-400 mt-2">Monthly access to updated training splits, live Q&As, and community motivation.</p>
+                        </div>
+                        <ul class="space-y-3 text-xs text-neutral-300">
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-gold"></i> Monthly Training Program Updates</li>
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-gold"></i> Exercise Video Technique Vault</li>
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-gold"></i> Community Telegram Group Access</li>
+                            <li class="flex items-center gap-2.5"><i class="fas fa-check text-brand-gold"></i> Monthly Live Group Q&A</li>
+                        </ul>
+                    </div>
+                    <div class="pt-8 space-y-4">
+                        <button onclick="openBookingModal('VIP Subscription Plan')" class="w-full py-3.5 bg-neutral-800 hover:bg-neutral-700 text-white font-heading font-bold uppercase rounded-xl transition-colors tracking-wider">
+                            Join Subscription
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="py-24 bg-neutral-950 border-t border-neutral-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <div class="lg:col-span-5 space-y-8">
+                    <div>
+                        <span class="text-xs font-bold text-brand-green uppercase tracking-widest bg-neutral-900 border border-neutral-800 px-3 py-1 rounded-md">
+                            Direct Contact
+                        </span>
+                        <h2 class="text-4xl sm:text-5xl font-heading font-bold uppercase text-white mt-3">
+                            Get In Touch With <span class="text-brand-green">Minte</span>
+                        </h2>
+                        <p class="text-neutral-400 text-base mt-2">Have questions about pricing, location, or coaching programs? Call or text directly.</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="glass-card p-5 rounded-2xl border border-neutral-800 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-brand-green/10 border border-brand-green/30 flex items-center justify-center text-brand-green text-xl">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-neutral-400 uppercase font-semibold">Phone / Telegram / WhatsApp</span>
+                                <a href="tel:0988714114" class="block text-2xl font-heading font-bold text-white hover:text-brand-green transition-colors">0988714114</a>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5 rounded-2xl border border-neutral-800 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-brand-red/10 border border-brand-red/30 flex items-center justify-center text-brand-red text-xl">
+                                <i class="fab fa-tiktok"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-neutral-400 uppercase font-semibold">TikTok Profile</span>
+                                <a href="https://tiktok.com/@minte.fitnesscoach" target="_blank" rel="noopener" class="block text-lg font-heading font-bold text-white hover:text-brand-red transition-colors">@minte.fitnesscoach</a>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5 rounded-2xl border border-neutral-800 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-brand-gold/10 border border-brand-gold/30 flex items-center justify-center text-brand-gold text-xl">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-neutral-400 uppercase font-semibold">Location</span>
+                                <p class="text-base font-heading font-bold text-white uppercase">Addis Ababa, Ethiopia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7">
+                    <div class="glass-card p-8 rounded-3xl border border-neutral-800 shadow-2xl">
+                        <h3 class="text-2xl font-heading font-bold text-white uppercase mb-6">Send A Direct Message</h3>
+                        <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="c-name" class="block text-xs font-bold uppercase text-neutral-400 mb-1.5">Your Name</label>
+                                    <input type="text" id="c-name" required placeholder="e.g. Dawit" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                                </div>
+                                <div>
+                                    <label for="c-phone" class="block text-xs font-bold uppercase text-neutral-400 mb-1.5">Phone Number</label>
+                                    <input type="tel" id="c-phone" required placeholder="09XXXXXXXX" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="c-goal" class="block text-xs font-bold uppercase text-neutral-400 mb-1.5">Primary Fitness Goal</label>
+                                <select id="c-goal" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                                    <option value="Fat Loss & Shredding">Fat Loss & Shredding</option>
+                                    <option value="Lean Muscle Gain">Lean Muscle Gain</option>
+                                    <option value="Body Recomposition">Body Recomposition</option>
+                                    <option value="Personal Gym Training">Personal Gym Training (In-Person)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="c-msg" class="block text-xs font-bold uppercase text-neutral-400 mb-1.5">Message / Details</label>
+                                <textarea id="c-msg" rows="4" required placeholder="Tell Coach Minte about your current workout experience..." class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 bg-brand-green text-neutral-950 font-heading font-bold uppercase tracking-wider text-base rounded-xl hover:bg-green-400 transition-colors glow-green">
+                                Send Message To Coach
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-neutral-950 py-10 border-t border-neutral-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-brand-green flex items-center justify-center text-black font-bold font-heading text-sm">
+                    M
+                </div>
+                <span class="font-heading text-xl font-bold uppercase text-white">MINTE.FIT <span class="text-brand-gold text-xs font-sans">• ብረት ጎፊ</span></span>
+            </div>
+
+            <p class="text-xs text-neutral-500 text-center md:text-left">
+                &copy; 2026 Minte Fitness Coach. All Rights Reserved. Built for high performance.
             </p>
+
+            <div class="flex items-center gap-4 text-neutral-400">
+                <a href="https://tiktok.com/@minte.fitnesscoach" target="_blank" rel="noopener" class="hover:text-brand-red text-lg transition-colors"><i class="fab fa-tiktok"></i></a>
+                <a href="tel:0988714114" class="hover:text-brand-green text-lg transition-colors"><i class="fas fa-phone-alt"></i></a>
+            </div>
         </div>
     </footer>
 
-    <div id="toast-notification" class="fixed bottom-6 right-6 z-50 hidden bg-gray-900 border border-neon-green text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 transition-all duration-300">
-        <div class="w-10 h-10 rounded-full bg-neon-green/20 flex items-center justify-center text-neon-green">
-            <i class="fas fa-check text-xl"></i>
+    <!-- CONSULTATION / BOOKING MODAL -->
+    <div id="booking-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="glass-card w-full max-w-lg p-6 sm:p-8 rounded-3xl border border-neutral-800 relative animate-in fade-in zoom-in duration-300">
+            <button onclick="closeBookingModal()" class="absolute top-5 right-5 text-neutral-400 hover:text-white text-xl p-2 focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="mb-6 text-left">
+                <span id="modal-tag" class="text-[10px] font-bold text-brand-green uppercase tracking-widest bg-neutral-900 border border-neutral-800 px-2.5 py-1 rounded">
+                    Coaching Booking
+                </span>
+                <h3 id="modal-title" class="text-2xl font-heading font-bold uppercase text-white mt-2">
+                    Start Your Transformation
+                </h3>
+                <p class="text-xs text-neutral-400 mt-1">Fill out your details below and Coach Minte will call you directly.</p>
+            </div>
+
+            <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-4 text-left">
+                <input type="hidden" id="selected-package" value="General">
+                
+                <div>
+                    <label for="b-name" class="block text-xs font-bold uppercase text-neutral-400 mb-1">Full Name</label>
+                    <input type="text" id="b-name" required placeholder="e.g. Yohannes" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-brand-green text-sm">
+                </div>
+
+                <div>
+                    <label for="b-phone" class="block text-xs font-bold uppercase text-neutral-400 mb-1">Phone Number</label>
+                    <input type="tel" id="b-phone" required placeholder="0911223344" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-brand-green text-sm">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label for="b-age" class="block text-xs font-bold uppercase text-neutral-400 mb-1">Age</label>
+                        <input type="number" id="b-age" placeholder="24" required class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-brand-green text-sm">
+                    </div>
+                    <div>
+                        <label for="b-time" class="block text-xs font-bold uppercase text-neutral-400 mb-1">Preferred Time</label>
+                        <select id="b-time" class="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-brand-green text-sm">
+                            <option value="Morning">Morning</option>
+                            <option value="Afternoon">Afternoon</option>
+                            <option value="Evening">Evening</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-brand-green text-neutral-950 font-heading font-bold uppercase tracking-wider text-base rounded-xl hover:bg-green-400 transition-colors glow-green mt-2">
+                    Confirm Consultation Request
+                </button>
+            </form>
         </div>
-        <div>
-            <p class="font-bold text-sm">Message Sent Successfully!</p>
-            <p class="text-xs text-gray-400">Coach Minte will get back to you soon.</p>
-        </div>
-        <button id="close-toast" class="ml-4 text-gray-400 hover:text-white focus:outline-none" aria-label="Close notification">
-            <i class="fas fa-times"></i>
-        </button>
     </div>
 
+    <!-- LIGHTBOX MODAL -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" onclick="closeLightbox()">
+        <div class="relative max-w-4xl w-full flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-white text-3xl hover:text-brand-green p-2">
+                <i class="fas fa-times"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="Gallery Lightbox Image" class="max-h-[80vh] w-auto object-contain rounded-2xl border border-neutral-800 shadow-2xl">
+            <p id="lightbox-caption" class="mt-4 text-center font-heading font-bold text-lg text-white uppercase tracking-wider"></p>
+        </div>
+    </div>
+
+    <!-- IN-APP TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-neutral-900 border border-brand-green text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 transition-all">
+        <div class="w-10 h-10 rounded-full bg-brand-green/20 text-brand-green flex items-center justify-center font-bold text-xl">
+            <i class="fas fa-check"></i>
+        </div>
+        <div>
+            <p id="toast-title" class="font-heading font-bold text-white text-base uppercase">Request Received!</p>
+            <p id="toast-msg" class="text-xs text-neutral-300">Coach Minte will call you shortly at 0988714114.</p>
+        </div>
+    </div>
+
+    <!-- Interactive Client Scripts -->
     <script>
-        // Mobile menu toggle logic
-        const btn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
+        // 1. Mobile Menu Drawer Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileDrawer = document.getElementById('mobile-drawer');
+        const mobileLinks = document.querySelectorAll('.mobile-nav-link');
 
-        if (btn && menu) {
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
+        mobileBtn.addEventListener('click', () => {
+            mobileDrawer.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileDrawer.classList.add('hidden');
             });
+        });
 
-            const mobileLinks = menu.querySelectorAll('a');
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    menu.classList.add('hidden');
+        // 2. Before/After Image Comparison Slider Logic
+        function initBAContainers() {
+            const containers = document.querySelectorAll('.ba-container');
+            containers.forEach(container => {
+                const afterImg = container.querySelector('.ba-after');
+                const slider = container.querySelector('.ba-slider');
+                let isDragging = false;
+
+                function setSliderPos(x) {
+                    const rect = container.getBoundingClientRect();
+                    let posX = x - rect.left;
+                    if (posX < 0) posX = 0;
+                    if (posX > rect.width) posX = rect.width;
+                    const pct = (posX / rect.width) * 100;
+                    afterImg.style.width = pct + '%';
+                    slider.style.left = pct + '%';
+                }
+
+                container.addEventListener('mousedown', (e) => { isDragging = true; setSliderPos(e.clientX); });
+                window.addEventListener('mouseup', () => { isDragging = false; });
+                window.addEventListener('mousemove', (e) => { if (isDragging) setSliderPos(e.clientX); });
+
+                container.addEventListener('touchstart', (e) => { isDragging = true; setSliderPos(e.touches[0].clientX); });
+                window.addEventListener('touchend', () => { isDragging = false; });
+                window.addEventListener('touchmove', (e) => { if (isDragging) setSliderPos(e.touches[0].clientX); });
+            });
+        }
+        initBAContainers();
+
+        // 3. Photo Gallery Filter Buttons
+        const filterBtns = document.querySelectorAll('.gallery-filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-brand-green', 'text-black');
+                    b.classList.add('bg-neutral-900', 'text-neutral-300');
+                });
+                btn.classList.remove('bg-neutral-900', 'text-neutral-300');
+                btn.classList.add('bg-brand-green', 'text-black');
+
+                const filter = btn.getAttribute('data-filter');
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.classList.contains(filter)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
                 });
             });
+        });
+
+        // 4. Lightbox Modal Logic
+        function openLightbox(src, caption) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-caption').innerText = caption;
+            document.getElementById('lightbox-modal').classList.remove('hidden');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').classList.add('hidden');
         }
 
-        // Contact form submission logic without using alert()
-        const contactForm = document.getElementById('contact-form');
-        const toast = document.getElementById('toast-notification');
-        const closeToastBtn = document.getElementById('close-toast');
+        // 5. Interactive BMI & Calorie Calculator
+        function calculateFitness(e) {
+            e.preventDefault();
+            const gender = document.getElementById('gender').value;
+            const age = parseFloat(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const activity = parseFloat(document.getElementById('activity').value);
 
-        if (contactForm) {
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (toast) {
-                    toast.classList.remove('hidden');
-                    setTimeout(() => {
-                        toast.classList.add('hidden');
-                    }, 5000);
-                }
-                contactForm.reset();
-            });
+            if (!weight || !height || !age) return;
+
+            // BMI Calculation
+            const heightM = height / 100;
+            const bmi = (weight / (heightM * heightM)).toFixed(1);
+
+            let category = "Normal Weight";
+            if (bmi < 18.5) category = "Underweight";
+            else if (bmi >= 25 && bmi < 29.9) category = "Overweight";
+            else if (bmi >= 30) category = "Obese";
+
+            // BMR (Mifflin-St Jeor Equation)
+            let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+            bmr = gender === 'male' ? bmr + 5 : bmr - 161;
+
+            const tdee = Math.round(bmr * activity);
+            const fatLoss = Math.round(tdee - 500);
+
+            // Set UI Output
+            document.getElementById('res-bmi').innerText = bmi;
+            document.getElementById('res-category').innerText = category;
+            document.getElementById('res-maintenance').innerText = tdee.toLocaleString();
+            document.getElementById('res-fatloss').innerText = fatLoss.toLocaleString();
+
+            let rec = "1-on-1 Personal Training";
+            if (category === "Overweight" || category === "Obese") rec = "Fat Loss Shred Coaching Program";
+            else if (category === "Underweight") rec = "Hypertrophy Muscle Gain Program";
+            else rec = "Full Body Recomposition Coaching";
+
+            document.getElementById('res-recommendation').innerText = rec;
         }
 
-        if (closeToastBtn && toast) {
-            closeToastBtn.addEventListener('click', () => {
+        // 6. Booking Modal & Toast Handlers
+        function openBookingModal(packageName) {
+            document.getElementById('selected-package').value = packageName;
+            document.getElementById('modal-title').innerText = "Book " + packageName;
+            document.getElementById('booking-modal').classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('booking-modal').classList.add('hidden');
+        }
+
+        function showToast(title, message) {
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-msg').innerText = message;
+            const toast = document.getElementById('toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
                 toast.classList.add('hidden');
-            });
+            }, 5000);
+        }
+
+        function handleBookingSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('b-name').value;
+            const pkg = document.getElementById('selected-package').value;
+            closeBookingModal();
+            showToast("Booking Received!", `Thank you ${name}. Coach Minte will contact you regarding ${pkg}.`);
+            e.target.reset();
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('c-name').value;
+            showToast("Message Sent!", `Thank you ${name}. Coach Minte has received your request.`);
+            e.target.reset();
         }
     </script>
 </body>
