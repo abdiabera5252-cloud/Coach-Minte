@@ -3,1584 +3,1103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MINTE.FIT - Elite Fitness & Mindset Coach</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
+    <title>MINTE.FIT | Minte Fitness Coach - Transform Your Physique</title>
+    <!-- Google Fonts: Oswald & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome Icons CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Supabase JS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- Tailwind Custom Configuration -->
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#05070A',
-                        cardBg: '#0D1117',
-                        cardBorder: '#1F2937',
-                        neonGreen: '#00FF38',
-                        orangeRed: '#FF3D00',
-                        accentDark: '#161B22'
+                        brandGreen: '#00FF38',
+                        brandGreenHover: '#00D62E',
+                        brandRed: '#FF3D00',
+                        brandRedHover: '#E03500',
+                        bgDark: '#050608',
+                        bgCard: '#0B0E14',
+                        bgCardHover: '#121620',
+                        borderMuted: 'rgba(255, 255, 255, 0.1)'
                     },
                     fontFamily: {
                         oswald: ['Oswald', 'sans-serif'],
-                        inter: ['Inter', 'sans-serif'],
-                        ethiopic: ['Noto Sans Ethiopic', 'sans-serif']
-                    },
-                    boxShadow: {
-                        'neon-glow': '0 0 20px rgba(0, 255, 56, 0.35)',
-                        'orange-glow': '0 0 20px rgba(255, 61, 0, 0.35)',
+                        inter: ['Inter', 'sans-serif']
                     }
                 }
             }
         }
     </script>
-
     <style>
         body {
-            background-color: #05070A;
-            color: #F3F4F6;
-            font-family: 'Inter', 'Noto Sans Ethiopic', sans-serif;
+            background-color: #050608;
+            color: #E2E8F0;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
 
-        /* Custom Scrollbar */
+        h1, h2, h3, h4, .font-oswald {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .neon-green-glow {
+            box-shadow: 0 0 25px rgba(0, 255, 56, 0.4);
+        }
+
+        .neon-red-glow {
+            box-shadow: 0 0 25px rgba(255, 61, 0, 0.35);
+        }
+
+        .bg-grid-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #05070A;
+            background: #050608;
         }
         ::-webkit-scrollbar-thumb {
-            background: #1F2937;
+            background: #1e293b;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #FF3D00;
+            background: #00FF38;
         }
 
-        /* Hero Background Overlay */
-        .hero-bg {
-            background: linear-gradient(180deg, rgba(5,7,10,0.75) 0%, rgba(5,7,10,0.85) 60%, #05070A 100%), 
-                        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-        }
-
-        /* Before-After Comparison Slider Styles */
-        .ba-container {
+        /* Before/After slider control */
+        .slider-container {
             position: relative;
             overflow: hidden;
             user-select: none;
         }
-        .ba-overlay {
+        .before-img-wrapper {
             position: absolute;
             top: 0;
             left: 0;
-            bottom: 0;
-            width: 50%;
+            height: 100%;
             overflow: hidden;
-        }
-
-        /* Pulse Animation */
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.85; transform: scale(1.05); }
-        }
-        .animate-pulse-glow {
-            animation: pulseGlow 2.5s infinite ease-in-out;
+            width: 50%;
+            border-right: 3px solid #00FF38;
         }
     </style>
 </head>
-<body class="antialiased selection:bg-orangeRed selection:text-white">
+<body class="bg-bgDark text-gray-100 antialiased bg-grid-pattern selection:bg-brandGreen selection:text-black">
 
-    <!-- Navigation Header -->
-    <header class="fixed top-0 left-0 w-full z-50 bg-darkBg/90 backdrop-blur-md border-b border-gray-800 transition-all duration-300">
+    <!-- Custom Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 w-full z-40 bg-black/80 backdrop-blur-md border-b border-white/10 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             
-            <!-- Brand Logo -->
-            <a href="#" class="flex items-center gap-2 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-orangeRed to-neonGreen flex items-center justify-center font-oswald text-black font-extrabold text-xl shadow-orange-glow group-hover:scale-105 transition-transform">
-                    M
+            <!-- Logo with Coach Avatar -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="relative w-11 h-11 rounded-full overflow-hidden border-2 border-brandGreen shadow-md shadow-brandGreen/20 group-hover:scale-105 transition-transform">
+                    <img src="menu.jpg" alt="Minte Coach Avatar" class="w-full h-full object-cover object-top" onerror="this.src='https://placehold.co/100x100/111/00FF38?text=MINTE'">
                 </div>
-                <div class="flex flex-col">
-                    <span class="font-oswald text-2xl font-bold tracking-wider text-white">MINTE<span class="text-orangeRed">.FIT</span></span>
-                    <span class="text-[10px] uppercase tracking-widest text-neonGreen font-semibold -mt-1">Coach Minte</span>
+                <div class="flex items-center gap-1 font-oswald text-2xl font-bold tracking-wider text-white">
+                    <span>MINTE</span><span class="text-brandGreen">.FIT</span>
                 </div>
             </a>
 
-            <!-- Desktop Nav Links -->
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href="#about" class="text-gray-300 hover:text-neonGreen transition-colors" data-i18n="nav_about">About Coach</a>
-                <a href="#transformations" class="text-gray-300 hover:text-neonGreen transition-colors" data-i18n="nav_transformations">Results</a>
-                <a href="#gallery" class="text-gray-300 hover:text-neonGreen transition-colors" data-i18n="nav_gallery">Gallery</a>
-                <a href="#calculator" class="text-gray-300 hover:text-neonGreen transition-colors" data-i18n="nav_calculator">Fitness Calc</a>
-                <a href="#packages" class="text-gray-300 hover:text-neonGreen transition-colors" data-i18n="nav_packages">Packages</a>
-                <a href="#chat" class="text-gray-300 hover:text-neonGreen transition-colors flex items-center gap-1.5" data-i18n="nav_chat">
-                    <i class="fa-solid fa-comments text-neonGreen text-xs"></i> Live Chat
-                </a>
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8 font-inter text-sm font-semibold tracking-wide text-gray-300">
+                <a href="#about" class="hover:text-brandGreen transition-colors">ABOUT</a>
+                <a href="#services" class="hover:text-brandGreen transition-colors">SERVICES</a>
+                <a href="#transformations" class="hover:text-brandGreen transition-colors">TRANSFORMATIONS</a>
+                <a href="#calculator" class="hover:text-brandGreen transition-colors">CALCULATOR</a>
+                <a href="#gallery" class="hover:text-brandGreen transition-colors">GALLERY</a>
+                <a href="#contact" class="hover:text-brandGreen transition-colors">CONTACT</a>
             </nav>
 
-            <!-- Actions & Language Switcher -->
-            <div class="hidden md:flex items-center gap-4">
-                <!-- Language Toggle Button -->
-                <button onclick="toggleLanguage()" id="langBtn" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cardBg border border-gray-700 hover:border-neonGreen text-xs font-semibold text-gray-200 transition-all">
-                    <i class="fa-solid fa-globe text-orangeRed"></i>
-                    <span id="langLabel">EN | አማርኛ</span>
-                </button>
-
-                <!-- CTA Button -->
-                <button onclick="openBookingModal()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-orangeRed to-red-600 hover:from-red-600 hover:to-orangeRed text-white font-oswald tracking-wide font-bold uppercase text-sm shadow-orange-glow transition-all hover:scale-105">
-                    <span data-i18n="nav_cta">Book Consultation</span>
+            <!-- CTA Green Button -->
+            <div class="hidden sm:flex items-center">
+                <button onclick="openBookingModal('General Subscription')" class="bg-brandGreen hover:bg-brandGreenHover text-black font-oswald font-bold px-6 py-2.5 rounded-full text-base transition-all transform hover:scale-105 neon-green-glow uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-xs"></i> JOIN SUBSCRIPTION
                 </button>
             </div>
 
             <!-- Mobile Hamburger Button -->
-            <div class="flex items-center gap-3 md:hidden">
-                <button onclick="toggleLanguage()" class="px-2.5 py-1 rounded-lg bg-cardBg border border-gray-700 text-xs font-semibold text-neonGreen">
-                    <span id="langLabelMobile">EN | አማርኛ</span>
-                </button>
-                <button onclick="toggleMobileMenu()" class="text-gray-300 hover:text-white focus:outline-none p-2">
-                    <i id="menuIcon" class="fa-solid fa-bars text-2xl"></i>
-                </button>
-            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white text-2xl p-2 focus:outline-none" aria-label="Toggle Menu">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
         </div>
 
-        <!-- Mobile Drawer -->
-        <div id="mobileMenu" class="hidden md:hidden bg-cardBg border-b border-gray-800 px-4 pt-2 pb-6 space-y-4">
-            <a href="#about" onclick="toggleMobileMenu()" class="block py-2 text-gray-200 hover:text-neonGreen border-b border-gray-800/50" data-i18n="nav_about">About Coach</a>
-            <a href="#transformations" onclick="toggleMobileMenu()" class="block py-2 text-gray-200 hover:text-neonGreen border-b border-gray-800/50" data-i18n="nav_transformations">Results</a>
-            <a href="#gallery" onclick="toggleMobileMenu()" class="block py-2 text-gray-200 hover:text-neonGreen border-b border-gray-800/50" data-i18n="nav_gallery">Gallery</a>
-            <a href="#calculator" onclick="toggleMobileMenu()" class="block py-2 text-gray-200 hover:text-neonGreen border-b border-gray-800/50" data-i18n="nav_calculator">Fitness Calc</a>
-            <a href="#packages" onclick="toggleMobileMenu()" class="block py-2 text-gray-200 hover:text-neonGreen border-b border-gray-800/50" data-i18n="nav_packages">Packages</a>
-            <a href="#chat" onclick="toggleMobileMenu()" class="block py-2 text-neonGreen font-semibold border-b border-gray-800/50" data-i18n="nav_chat">Live Chat</a>
-            
-            <button onclick="openBookingModal(); toggleMobileMenu();" class="w-full mt-3 py-3 rounded-xl bg-orangeRed text-white font-oswald font-bold uppercase tracking-wider text-center shadow-orange-glow">
-                <span data-i18n="nav_cta">Book Consultation</span>
-            </button>
+        <!-- Mobile Drawer Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-bgCard border-b border-white/10 px-6 py-6 transition-all">
+            <div class="flex flex-col gap-4 font-oswald text-lg text-gray-200">
+                <a href="#about" class="mobile-nav-link hover:text-brandGreen">ABOUT</a>
+                <a href="#services" class="mobile-nav-link hover:text-brandGreen">SERVICES</a>
+                <a href="#transformations" class="mobile-nav-link hover:text-brandGreen">TRANSFORMATIONS</a>
+                <a href="#calculator" class="mobile-nav-link hover:text-brandGreen">MACRO CALCULATOR</a>
+                <a href="#gallery" class="mobile-nav-link hover:text-brandGreen">GALLERY</a>
+                <a href="#contact" class="mobile-nav-link hover:text-brandGreen">CONTACT</a>
+                <button onclick="openBookingModal('Mobile Subscription')" class="mt-2 bg-brandGreen text-black font-oswald font-bold px-5 py-3 rounded-full text-center text-base neon-green-glow">
+                    JOIN SUBSCRIPTION
+                </button>
+            </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen pt-28 pb-16 hero-bg flex items-center justify-center">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            <!-- Left Text Content -->
-            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+    <section class="relative min-h-screen pt-32 pb-20 flex items-center overflow-hidden">
+        <!-- Radial gradient background glow effects -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brandRed/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-10 right-10 w-96 h-96 bg-brandGreen/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
-                <!-- Badge -->
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cardBg/90 border border-neonGreen/40 text-neonGreen text-xs font-semibold uppercase tracking-wider">
-                    <span class="w-2 h-2 rounded-full bg-neonGreen animate-ping"></span>
-                    <span data-i18n="hero_badge">#1 Personal Trainer & Mindset Coach</span>
-                </div>
-
-                <!-- Main Headline -->
-                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-oswald font-extrabold uppercase leading-tight tracking-tight text-white">
-                    <span data-i18n="hero_title_1">TRANSFORM YOUR</span> 
-                    <span class="text-orangeRed drop-shadow-md" data-i18n="hero_title_2">PHYSIQUE.</span> <br/>
-                    <span data-i18n="hero_title_3">ELEVATE YOUR MIND.</span>
-                </h1>
-
-                <!-- Subtitle -->
-                <p class="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed" data-i18n="hero_subtitle">
-                    Achieve peak athletic performance, shed stuborn fat, and build elite muscular strength with customized training programs tailored for real life.
-                </p>
-
-                <!-- Hero CTAs -->
-                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-                    <button onclick="openBookingModal()" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-orangeRed to-red-600 hover:from-red-600 hover:to-orangeRed text-white font-oswald text-lg font-bold uppercase tracking-wider shadow-orange-glow transition-all hover:scale-105 flex items-center justify-center gap-2">
-                        <span data-i18n="hero_cta_start">Start Transformation</span>
-                        <i class="fa-solid fa-arrow-right text-sm"></i>
-                    </button>
+                <!-- Hero Left Text Content -->
+                <div class="lg:col-span-7 flex flex-col items-start space-y-6">
                     
-                    <a href="#chat" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-cardBg border border-gray-700 hover:border-neonGreen text-gray-200 hover:text-neonGreen font-oswald text-lg font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-comment-dots text-neonGreen"></i>
-                        <span data-i18n="hero_cta_chat">Chat With Coach</span>
-                    </a>
-                </div>
-
-                <!-- Fast Stats Grid -->
-                <div class="grid grid-cols-3 gap-4 pt-8 border-t border-gray-800/80 max-w-lg mx-auto lg:mx-0">
-                    <div>
-                        <p class="font-oswald text-2xl sm:text-3xl font-extrabold text-neonGreen">500+</p>
-                        <p class="text-xs text-gray-400 uppercase tracking-wide" data-i18n="stat_clients">Clients Transformed</p>
-                    </div>
-                    <div>
-                        <p class="font-oswald text-2xl sm:text-3xl font-extrabold text-orangeRed">10+ Yrs</p>
-                        <p class="text-xs text-gray-400 uppercase tracking-wide" data-i18n="stat_experience">Coach Experience</p>
-                    </div>
-                    <div>
-                        <p class="font-oswald text-2xl sm:text-3xl font-extrabold text-white">99.4%</p>
-                        <p class="text-xs text-gray-400 uppercase tracking-wide" data-i18n="stat_success">Success Rate</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Showcase Card: Coach Minte -->
-            <div class="lg:col-span-5 flex justify-center">
-                <div class="relative w-full max-w-md bg-cardBg/90 backdrop-blur-xl border border-gray-800 rounded-3xl p-6 shadow-2xl transition-all hover:border-gray-700">
-                    
-                    <!-- Decorative Top Ribbon -->
-                    <div class="absolute -top-3 right-6 bg-gradient-to-r from-neonGreen to-emerald-500 text-black font-oswald text-xs font-black uppercase px-4 py-1 rounded-full shadow-neon-glow flex items-center gap-1.5">
-                        <i class="fa-solid fa-trophy"></i>
-                        <span>Pro Certified Coach</span>
+                    <!-- Accepting Clients Badge -->
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+                        <span class="w-2.5 h-2.5 rounded-full bg-brandGreen animate-pulse"></span>
+                        <span class="text-xs sm:text-sm font-medium text-gray-300 tracking-wide">Accepting New Clients</span>
                     </div>
 
-                    <!-- Coach Photo/Avatar -->
-                    <div class="relative rounded-2xl overflow-hidden aspect-[4/5] mb-5 border border-gray-800">
-                        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800&auto=format&fit=crop" 
-                             alt="Coach Minte Profile" 
-                             class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
-                             onerror="this.src='https://placehold.co/600x800/0D1117/00FF38?text=Coach+Minte'">
-                        
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-5">
-                            <span class="text-xs font-semibold uppercase tracking-wider text-neonGreen" data-i18n="coach_title">Head Coach & Founder</span>
-                            <h3 class="text-2xl font-oswald font-extrabold text-white">Coach Minte</h3>
+                    <!-- Main Oswald Condensed Title with Red PHYSIQUE Accent -->
+                    <h1 class="font-oswald text-5xl sm:text-7xl xl:text-8xl font-extrabold leading-none text-white tracking-tight uppercase">
+                        TRANSFORM YOUR <br>
+                        <span class="text-brandRed drop-shadow-[0_0_20px_rgba(255,61,0,0.4)]">PHYSIQUE</span> <br>
+                        ELEVATE YOUR MIND.
+                    </h1>
+
+                    <!-- Hero Subtext -->
+                    <p class="text-gray-300 text-base sm:text-xl font-normal max-w-2xl leading-relaxed">
+                        Join an elite community dedicated to real results. Expert guidance, tailored programming, and relentless motivation from Minte Fitness Coach.
+                    </p>
+
+                    <!-- Hero Action Buttons -->
+                    <div class="flex flex-wrap gap-4 pt-4 w-full sm:w-auto">
+                        <button onclick="openBookingModal('Hero Transformation')" class="bg-brandGreen hover:bg-brandGreenHover text-black font-oswald font-bold px-8 py-4 rounded-xl text-lg sm:text-xl tracking-wider transition-all transform hover:-translate-y-0.5 neon-green-glow flex items-center justify-center gap-3 w-full sm:w-auto">
+                            <span>START YOUR TRANSFORMATION</span>
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </button>
+
+                        <a href="#services" class="bg-white/5 hover:bg-white/10 text-white border border-white/20 font-oswald font-semibold px-8 py-4 rounded-xl text-lg sm:text-xl tracking-wider transition-all flex items-center justify-center gap-2 w-full sm:w-auto backdrop-blur-sm">
+                            <i class="fa-solid fa-dumbbell text-brandGreen"></i>
+                            <span>EXPLORE PROGRAMS</span>
+                        </a>
+                    </div>
+
+                    <!-- Quick Metrics Strip -->
+                    <div class="grid grid-cols-3 gap-6 pt-8 border-t border-white/10 w-full max-w-xl">
+                        <div>
+                            <div class="font-oswald text-3xl sm:text-4xl font-bold text-white">500+</div>
+                            <div class="text-xs sm:text-sm text-gray-400 font-medium">Clients Transformed</div>
+                        </div>
+                        <div>
+                            <div class="font-oswald text-3xl sm:text-4xl font-bold text-brandGreen">8+ YRS</div>
+                            <div class="text-xs sm:text-sm text-gray-400 font-medium">Pro Coaching</div>
+                        </div>
+                        <div>
+                            <div class="font-oswald text-3xl sm:text-4xl font-bold text-brandRed">100%</div>
+                            <div class="text-xs sm:text-sm text-gray-400 font-medium">Custom Tailored</div>
                         </div>
                     </div>
 
-                    <!-- Profile Details List -->
-                    <div class="space-y-3 text-sm">
+                </div>
+
+                <!-- Hero Right - Crisp Bodybuilder Feature Frame -->
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <!-- Frame Outer Glow -->
+                    <div class="relative w-full max-w-md aspect-[4/5] rounded-3xl p-1 bg-gradient-to-b from-white/20 via-brandGreen/30 to-brandRed/40 shadow-2xl overflow-hidden">
                         
-                        <!-- Phone Number -->
-                        <a href="tel:0988714114" class="flex items-center justify-between p-3 rounded-xl bg-accentDark border border-gray-800 hover:border-orangeRed transition-colors group">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-lg bg-orangeRed/20 text-orangeRed flex items-center justify-center">
-                                    <i class="fa-solid fa-phone"></i>
+                        <div class="w-full h-full bg-bgCard rounded-[22px] overflow-hidden relative group">
+                            <!-- High resolution Coach photo -->
+                            <img src="gal1.png" alt="Coach Minte Bodybuilding Champion" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+                            
+                            <!-- Dark Gradient overlay for text contrast -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90"></div>
+
+                            <!-- Bottom Badge Details inside Hero Photo -->
+                            <div class="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-black/75 backdrop-blur-md border border-white/15 space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-oswald text-xl font-bold text-white uppercase tracking-wider">COACH MINTE</span>
+                                    <span class="bg-brandRed/20 border border-brandRed/50 text-brandRed font-oswald text-xs font-bold px-2.5 py-0.5 rounded-md uppercase">Gold Medalist</span>
                                 </div>
-                                <div>
-                                    <p class="text-xs text-gray-400" data-i18n="coach_phone_label">Direct Call / WhatsApp</p>
-                                    <p class="font-oswald text-base font-bold text-white group-hover:text-orangeRed">0988714114</p>
+                                <p class="text-xs text-gray-300">Certified IFBB Champion & Elite Physique Coach</p>
+                                <div class="flex items-center gap-2 pt-1 text-xs text-brandGreen">
+                                    <i class="fa-solid fa-trophy"></i>
+                                    <span>Personalized Meal & Workout Systems</span>
                                 </div>
                             </div>
-                            <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:translate-x-1 transition-transform"></i>
-                        </a>
-
-                        <!-- TikTok Handle -->
-                        <a href="https://tiktok.com/@minte.fitnesscoach" target="_blank" class="flex items-center justify-between p-3 rounded-xl bg-accentDark border border-gray-800 hover:border-neonGreen transition-colors group">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-lg bg-neonGreen/20 text-neonGreen flex items-center justify-center">
-                                    <i class="fa-brands fa-tiktok"></i>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-400" data-i18n="coach_tiktok_label">TikTok Official</p>
-                                    <p class="font-oswald text-base font-bold text-white group-hover:text-neonGreen">@minte.fitnesscoach</p>
-                                </div>
-                            </div>
-                            <span class="text-xs font-semibold text-neonGreen uppercase tracking-wider" data-i18n="coach_follow">Follow</span>
-                        </a>
-
-                        <!-- Direct Actions -->
-                        <div class="grid grid-cols-2 gap-3 pt-2">
-                            <a href="https://t.me/mintefitness" target="_blank" class="py-2.5 px-4 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 hover:bg-blue-600/30 font-semibold text-xs flex items-center justify-center gap-2 transition-all">
-                                <i class="fa-brands fa-telegram text-sm"></i> Telegram
-                            </a>
-                            <button onclick="openChatWidget()" class="py-2.5 px-4 rounded-xl bg-neonGreen/20 border border-neonGreen/40 text-neonGreen hover:bg-neonGreen/30 font-semibold text-xs flex items-center justify-center gap-2 transition-all">
-                                <i class="fa-solid fa-bolt text-sm"></i> Instant Chat
-                            </button>
                         </div>
+
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </section>
 
-    <!-- Before / After Transformations Section -->
-    <section id="transformations" class="py-24 bg-darkBg border-t border-gray-900">
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-bgCard relative border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Left Decorative Grid Cards -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-6 rounded-2xl bg-bgDark border border-white/10 hover:border-brandGreen/40 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-brandGreen/10 flex items-center justify-center text-brandGreen text-2xl mb-4">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="font-oswald text-xl font-bold text-white mb-2">Precision Method</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">No cookie-cutter routines. Every program is calibrated to your biomechanics and lifestyle.</p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-bgDark border border-white/10 hover:border-brandRed/40 transition-all mt-6">
+                        <div class="w-12 h-12 rounded-xl bg-brandRed/10 flex items-center justify-center text-brandRed text-2xl mb-4">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <h3 class="font-oswald text-xl font-bold text-white mb-2">Maximum Energy</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Build unshakeable mental discipline alongside peak physical muscle condition.</p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-bgDark border border-white/10 hover:border-brandRed/40 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-brandRed/10 flex items-center justify-center text-brandRed text-2xl mb-4">
+                            <i class="fa-solid fa-apple-whole"></i>
+                        </div>
+                        <h3 class="font-oswald text-xl font-bold text-white mb-2">Custom Macros</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Flexible nutrition plans engineered for fat burning without starving your favorite foods.</p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-bgDark border border-white/10 hover:border-brandGreen/40 transition-all mt-6">
+                        <div class="w-12 h-12 rounded-xl bg-brandGreen/10 flex items-center justify-center text-brandGreen text-2xl mb-4">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="font-oswald text-xl font-bold text-white mb-2">Weekly Audits</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Direct 1-on-1 photo & video check-ins to fix plateaus instantly and guarantee progress.</p>
+                    </div>
+                </div>
+
+                <!-- Right Coach Bio Text -->
+                <div class="space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brandGreen/10 border border-brandGreen/30 text-brandGreen font-oswald text-sm font-semibold tracking-wider uppercase">
+                        MEET YOUR COACH
+                    </div>
+                    <h2 class="font-oswald text-4xl sm:text-5xl font-extrabold text-white leading-tight">
+                        PASSIONATE ABOUT DRIVING REAL <span class="text-brandGreen">PHYSIQUE REVOLUTIONS</span>.
+                    </h2>
+                    <p class="text-gray-300 text-base leading-relaxed">
+                        I am Minte Fitness Coach—natural bodybuilder, competition champion, and dedicated lifestyle mentor. My mission is simple: eliminate fluff and give you science-backed, high-yield training protocols.
+                    </p>
+                    <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+                        Whether you want to strip off stubborn belly fat, pack on dense lean muscle, or step onto a competition stage, I build the exact roadmap tailored to your body type.
+                    </p>
+
+                    <!-- Key Bullet Points -->
+                    <div class="space-y-3 pt-2">
+                        <div class="flex items-center gap-3 text-gray-200">
+                            <i class="fa-solid fa-circle-check text-brandGreen text-lg"></i>
+                            <span class="font-medium">Direct WhatsApp & Mobile 1-on-1 Access</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-200">
+                            <i class="fa-solid fa-circle-check text-brandGreen text-lg"></i>
+                            <span class="font-medium">Custom Training Plans (Home or Gym)</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-200">
+                            <i class="fa-solid fa-circle-check text-brandGreen text-lg"></i>
+                            <span class="font-medium">Cardio, Supplementation & Recovery Guidelines</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button onclick="openBookingModal('About Coach Section')" class="bg-brandRed hover:bg-brandRedHover text-white font-oswald font-bold px-8 py-3.5 rounded-xl text-lg tracking-wider transition-all neon-red-glow">
+                            APPLY FOR DIRECT COACHING
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                <span class="text-xs font-bold text-neonGreen uppercase tracking-widest" data-i18n="trans_subtitle">Real People. Real Results.</span>
-                <h2 class="text-3xl sm:text-5xl font-oswald font-extrabold uppercase text-white" data-i18n="trans_title">
-                    CLIENT <span class="text-orangeRed">TRANSFORMATIONS</span>
+                <div class="inline-block px-3 py-1 rounded-md bg-brandRed/10 border border-brandRed/30 text-brandRed font-oswald text-sm font-semibold tracking-wider uppercase">
+                    OUR OFFERINGS
+                </div>
+                <h2 class="font-oswald text-4xl sm:text-6xl font-extrabold text-white">
+                    SELECT YOUR <span class="text-brandGreen">TRANSFORMATION</span> PATH
                 </h2>
-                <p class="text-gray-400 text-sm sm:text-base" data-i18n="trans_desc">
-                    Drag the interactive comparison slider left and right to inspect real physique changes achieved through Minte Fitness programs.
+                <p class="text-gray-400 text-base sm:text-lg">
+                    High-yield fitness coaching programs designed for sustainable, elite-level results.
                 </p>
             </div>
 
-            <!-- Transformation Showcase Container -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <!-- 3 Columns Services Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 
-                <!-- Interactive Comparison Slider Box -->
-                <div class="lg:col-span-7">
-                    <div id="baSlider" class="ba-container w-full h-[380px] sm:h-[480px] rounded-3xl overflow-hidden border border-gray-800 shadow-2xl relative cursor-ew-resize">
-                        
-                        <!-- After Image (Background) -->
-                        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1000&auto=format&fit=crop" 
-                             alt="After Transformation" 
-                             class="absolute inset-0 w-full h-full object-cover">
-                        <span class="absolute top-4 right-4 bg-neonGreen text-black font-oswald text-xs font-black uppercase px-3 py-1 rounded-md z-10" data-i18n="after_tag">
-                            AFTER (12 WEEKS)
-                        </span>
-
-                        <!-- Before Image (Overlay clipped) -->
-                        <div id="baOverlay" class="ba-overlay">
-                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1000&auto=format&fit=crop" 
-                                 alt="Before Transformation" 
-                                 class="absolute inset-0 w-full h-full object-cover max-w-none min-w-full">
-                            <span class="absolute top-4 left-4 bg-gray-900/90 text-white border border-gray-700 font-oswald text-xs font-black uppercase px-3 py-1 rounded-md z-10" data-i18n="before_tag">
-                                BEFORE
-                            </span>
+                <!-- Service 1: 1-on-1 Personal Training -->
+                <div class="bg-bgCard rounded-3xl p-8 border border-white/10 hover:border-brandGreen/50 transition-all flex flex-col justify-between group">
+                    <div class="space-y-6">
+                        <div class="w-16 h-16 rounded-2xl bg-brandGreen/10 flex items-center justify-center text-brandGreen text-3xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-user-ninja"></i>
                         </div>
-
-                        <!-- Draggable Divider Bar -->
-                        <div id="baHandle" class="absolute top-0 bottom-0 w-1 bg-neonGreen shadow-neon-glow z-20" style="left: 50%;">
-                            <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-neonGreen text-black flex items-center justify-center font-bold text-xs shadow-lg border-2 border-white">
-                                <i class="fa-solid fa-arrows-left-right"></i>
-                            </div>
-                        </div>
+                        <h3 class="font-oswald text-2xl sm:text-3xl font-bold text-white">1-ON-1 VIP HYBRID</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            In-person sessions combined with elite digital tracking. Get hands-on form corrections and maximum intensity.
+                        </p>
+                        <ul class="space-y-3 text-sm text-gray-300 border-t border-white/10 pt-6">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandGreen"></i> Full Biomechanical Assessment</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandGreen"></i> In-Person Technique Coaching</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandGreen"></i> Complete Meal Protocol</li>
+                        </ul>
+                    </div>
+                    <div class="pt-8">
+                        <button onclick="openBookingModal('1-on-1 VIP Hybrid')" class="w-full bg-white/5 hover:bg-brandGreen hover:text-black border border-white/20 font-oswald font-bold py-3 rounded-xl transition-all uppercase tracking-wider text-white">
+                            SELECT PROGRAM
+                        </button>
                     </div>
                 </div>
 
-                <!-- Client Transformation Stats Card -->
-                <div class="lg:col-span-5 space-y-6 bg-cardBg border border-gray-800 rounded-3xl p-8">
-                    <div class="flex items-center justify-between border-b border-gray-800 pb-4">
-                        <div>
-                            <h3 id="clientName" class="text-2xl font-oswald font-extrabold text-white">Dawit Tekle</h3>
-                            <p id="clientPlan" class="text-xs text-neonGreen uppercase font-semibold">12-Week Fat Loss & Muscle Sculpt</p>
-                        </div>
-                        <span class="px-3 py-1 rounded-full bg-orangeRed/20 text-orangeRed border border-orangeRed/40 font-oswald text-sm font-bold">
-                            -18.5 KG
-                        </span>
+                <!-- Service 2: Online Coaching (Highlighted Card) -->
+                <div class="bg-gradient-to-b from-bgCardHover to-bgCard rounded-3xl p-8 border-2 border-brandGreen relative flex flex-col justify-between shadow-xl shadow-brandGreen/10">
+                    <div class="absolute -top-4 right-8 bg-brandGreen text-black font-oswald font-extrabold text-xs px-4 py-1.5 rounded-full uppercase tracking-wider shadow-md">
+                        MOST POPULAR
                     </div>
-
-                    <p id="clientQuote" class="text-gray-300 text-sm italic leading-relaxed">
-                        "Coach Minte changed my entire relationship with fitness and nutrition. The customized macros and realistic workouts fit my busy schedule perfectly. I lost 18.5kg while building real strength!"
-                    </p>
-
-                    <div class="grid grid-cols-2 gap-4 text-center">
-                        <div class="bg-accentDark p-4 rounded-2xl border border-gray-800">
-                            <span class="text-xs text-gray-400 uppercase" data-i18n="trans_bodyfat">Body Fat Lost</span>
-                            <p class="font-oswald text-2xl font-bold text-orangeRed mt-1">-12%</p>
+                    <div class="space-y-6">
+                        <div class="w-16 h-16 rounded-2xl bg-brandGreen/20 flex items-center justify-center text-brandGreen text-3xl">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
                         </div>
-                        <div class="bg-accentDark p-4 rounded-2xl border border-gray-800">
-                            <span class="text-xs text-gray-400 uppercase" data-i18n="trans_time">Duration</span>
-                            <p class="font-oswald text-2xl font-bold text-neonGreen mt-1">90 Days</p>
-                        </div>
+                        <h3 class="font-oswald text-2xl sm:text-3xl font-bold text-white">ONLINE GLOBAL COACHING</h3>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Full remote guidance wherever you live. Video form reviews, custom workout app updates, and weekly check-ins.
+                        </p>
+                        <ul class="space-y-3 text-sm text-gray-300 border-t border-white/10 pt-6">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandGreen"></i> Fully Customized Gym/Home Plan</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandGreen"></i> Macro & Calorie Blueprint</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandGreen"></i> 24/7 WhatsApp Chat Support</li>
+                        </ul>
                     </div>
+                    <div class="pt-8">
+                        <button onclick="openBookingModal('Online Global Coaching')" class="w-full bg-brandGreen hover:bg-brandGreenHover text-black font-oswald font-extrabold py-3.5 rounded-xl transition-all uppercase tracking-wider neon-green-glow">
+                            JOIN ONLINE NOW
+                        </button>
+                    </div>
+                </div>
 
-                    <!-- Client Switcher Tabs -->
-                    <div class="flex items-center gap-2 pt-2">
-                        <button onclick="switchTransformation(0)" class="trans-tab active flex-1 py-2 rounded-xl bg-neonGreen text-black font-semibold text-xs transition-all">Dawit</button>
-                        <button onclick="switchTransformation(1)" class="trans-tab flex-1 py-2 rounded-xl bg-accentDark border border-gray-800 text-gray-300 font-semibold text-xs hover:border-gray-700 transition-all">Selam</button>
-                        <button onclick="switchTransformation(2)" class="trans-tab flex-1 py-2 rounded-xl bg-accentDark border border-gray-800 text-gray-300 font-semibold text-xs hover:border-gray-700 transition-all">Yonas</button>
+                <!-- Service 3: Contest Prep -->
+                <div class="bg-bgCard rounded-3xl p-8 border border-white/10 hover:border-brandRed/50 transition-all flex flex-col justify-between group">
+                    <div class="space-y-6">
+                        <div class="w-16 h-16 rounded-2xl bg-brandRed/10 flex items-center justify-center text-brandRed text-3xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <h3 class="font-oswald text-2xl sm:text-3xl font-bold text-white">CONTEST & PHYSIQUE PREP</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            For bodybuilders and physique athletes preparing to stage compete or achieve peak sub-8% body fat conditioning.
+                        </p>
+                        <ul class="space-y-3 text-sm text-gray-300 border-t border-white/10 pt-6">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandRed"></i> Peak Week Manipulation Plan</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandRed"></i> Stage Posing Routine Coaching</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandRed"></i> Daily Body Metrics Monitoring</li>
+                        </ul>
+                    </div>
+                    <div class="pt-8">
+                        <button onclick="openBookingModal('Contest Prep')" class="w-full bg-white/5 hover:bg-brandRed hover:text-white border border-white/20 font-oswald font-bold py-3 rounded-xl transition-all uppercase tracking-wider text-white">
+                            SELECT PROGRAM
+                        </button>
                     </div>
                 </div>
 
             </div>
+
         </div>
     </section>
 
-    <!-- Photo Gallery Section -->
-    <section id="gallery" class="py-24 bg-cardBg border-t border-gray-900">
+    <!-- Transformations Section -->
+    <section id="transformations" class="py-24 bg-bgCard border-y border-white/5 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
-                <span class="text-xs font-bold text-orangeRed uppercase tracking-widest" data-i18n="gallery_subtitle">Training in Action</span>
-                <h2 class="text-3xl sm:text-5xl font-oswald font-extrabold uppercase text-white" data-i18n="gallery_title">
-                    MINTE.FIT <span class="text-neonGreen">GALLERY</span>
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <div class="inline-block px-3 py-1 rounded-md bg-brandGreen/10 border border-brandGreen/30 text-brandGreen font-oswald text-sm font-semibold tracking-wider uppercase">
+                    PROVEN RESULTS
+                </div>
+                <h2 class="font-oswald text-4xl sm:text-6xl font-extrabold text-white">
+                    CLIENT <span class="text-brandRed">TRANSFORMATIONS</span>
                 </h2>
-                <p class="text-gray-400 text-sm sm:text-base" data-i18n="gallery_desc">
-                    Explore inside the gym, personal training sessions, nutrition plans, and client achievements.
+                <p class="text-gray-400 text-base sm:text-lg">
+                    Drag the slider on the card below to reveal real client changes achieved with MINTE.FIT programming.
                 </p>
             </div>
 
-            <!-- Gallery Filter Buttons -->
-            <div class="flex flex-wrap items-center justify-center gap-3 mb-10">
-                <button onclick="filterGallery('all')" class="gallery-filter active px-5 py-2 rounded-xl bg-neonGreen text-black font-bold text-xs uppercase transition-all">All Photos</button>
-                <button onclick="filterGallery('gym')" class="gallery-filter px-5 py-2 rounded-xl bg-darkBg border border-gray-800 text-gray-300 font-semibold text-xs uppercase hover:border-neonGreen transition-all">Gym Workouts</button>
-                <button onclick="filterGallery('nutrition')" class="gallery-filter px-5 py-2 rounded-xl bg-darkBg border border-gray-800 text-gray-300 font-semibold text-xs uppercase hover:border-neonGreen transition-all">Nutrition & Meals</button>
-                <button onclick="filterGallery('coaching')" class="gallery-filter px-5 py-2 rounded-xl bg-darkBg border border-gray-800 text-gray-300 font-semibold text-xs uppercase hover:border-neonGreen transition-all">1-on-1 Coaching</button>
+            <!-- Interactive Before / After Split Card -->
+            <div class="max-w-4xl mx-auto bg-bgDark rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Slider Box (7 Cols) -->
+                    <div class="md:col-span-7">
+                        <div id="before-after-slider" class="slider-container relative w-full aspect-[4/3] rounded-2xl overflow-hidden cursor-ew-resize border border-white/20 shadow-lg">
+                            
+                            <!-- After Image (Base) -->
+                            <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=800&q=80" alt="After Transformation" class="absolute inset-0 w-full h-full object-cover">
+                            <span class="absolute bottom-4 right-4 bg-brandGreen/90 text-black font-oswald font-bold px-3 py-1 rounded text-xs uppercase z-10">AFTER (WEEK 12)</span>
+
+                            <!-- Before Image (Overlaid Clip) -->
+                            <div id="before-wrapper" class="before-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80" alt="Before Transformation" class="absolute inset-0 w-full h-full object-cover min-w-[300px] sm:min-w-[450px]">
+                                <span class="absolute bottom-4 left-4 bg-black/80 text-white font-oswald font-bold px-3 py-1 rounded text-xs uppercase border border-white/20 z-10">BEFORE (DAY 1)</span>
+                            </div>
+
+                            <!-- Divider Bar & Drag Button -->
+                            <div id="slider-handle" class="absolute top-0 bottom-0 left-1/2 w-1 bg-brandGreen cursor-ew-resize z-20 flex items-center justify-center -ml-0.5">
+                                <div class="w-8 h-8 rounded-full bg-brandGreen text-black flex items-center justify-center text-xs font-bold shadow-lg">
+                                    <i class="fa-solid fa-arrows-left-right"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                        <p class="text-xs text-center text-gray-500 mt-3"><i class="fa-solid fa-hand-pointer mr-1"></i> Drag left or right to compare results</p>
+                    </div>
+
+                    <!-- Client Detail Stats (5 Cols) -->
+                    <div class="md:col-span-5 space-y-6">
+                        <div>
+                            <div class="flex items-center gap-2 text-brandRed font-oswald text-sm font-bold tracking-wider uppercase mb-1">
+                                <i class="fa-solid fa-fire-flame-curved"></i> 12-WEEK SHRED PROGRAM
+                            </div>
+                            <h3 class="font-oswald text-3xl font-bold text-white">YONATAN T.</h3>
+                            <p class="text-xs text-gray-400">Software Engineer, Hawassa</p>
+                        </div>
+
+                        <!-- Metrics Grid -->
+                        <div class="grid grid-cols-2 gap-4 pt-2">
+                            <div class="bg-bgCard p-3.5 rounded-xl border border-white/5">
+                                <div class="text-xs text-gray-400">Weight Loss</div>
+                                <div class="font-oswald text-2xl font-bold text-brandGreen">-14.2 KG</div>
+                            </div>
+                            <div class="bg-bgCard p-3.5 rounded-xl border border-white/5">
+                                <div class="text-xs text-gray-400">Body Fat %</div>
+                                <div class="font-oswald text-2xl font-bold text-brandRed">24% → 11%</div>
+                            </div>
+                            <div class="bg-bgCard p-3.5 rounded-xl border border-white/5">
+                                <div class="text-xs text-gray-400">Waist Size</div>
+                                <div class="font-oswald text-2xl font-bold text-white">-12 CM</div>
+                            </div>
+                            <div class="bg-bgCard p-3.5 rounded-xl border border-white/5">
+                                <div class="text-xs text-gray-400">Energy Level</div>
+                                <div class="font-oswald text-2xl font-bold text-brandGreen">10 / 10</div>
+                            </div>
+                        </div>
+
+                        <!-- Quote -->
+                        <blockquote class="text-sm text-gray-300 italic border-l-2 border-brandGreen pl-4">
+                            "Minte completely transformed my understanding of nutrition and workout intensity. I lost 14 kg without giving up my staple foods!"
+                        </blockquote>
+
+                        <button onclick="openBookingModal('Transformation Story')" class="w-full bg-brandGreen text-black font-oswald font-bold py-3 rounded-xl neon-green-glow uppercase tracking-wider text-base">
+                            GET YOUR TRANSFORMATION PLAN
+                        </button>
+                    </div>
+
+                </div>
+
             </div>
 
-            <!-- Gallery Grid -->
-            <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Dynamic Items Inserted via JS -->
-            </div>
         </div>
     </section>
 
     <!-- Fitness Calculator Section -->
-    <section id="calculator" class="py-24 bg-darkBg border-t border-gray-900">
+    <section id="calculator" class="py-24 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                <span class="text-xs font-bold text-neonGreen uppercase tracking-widest" data-i18n="calc_subtitle">Precision Fitness Analytics</span>
-                <h2 class="text-3xl sm:text-5xl font-oswald font-extrabold uppercase text-white" data-i18n="calc_title">
-                    BMI, TDEE & <span class="text-orangeRed">MACRO CALCULATOR</span>
+                <div class="inline-block px-3 py-1 rounded-md bg-brandRed/10 border border-brandRed/30 text-brandRed font-oswald text-sm font-semibold tracking-wider uppercase">
+                    FREE TOOL
+                </div>
+                <h2 class="font-oswald text-4xl sm:text-6xl font-extrabold text-white">
+                    CALORIE & <span class="text-brandGreen">MACRO</span> CALCULATOR
                 </h2>
-                <p class="text-gray-400 text-sm sm:text-base" data-i18n="calc_desc">
-                    Calculate your exact daily caloric expenditure and ideal macronutrient breakdown tailored for your body goals.
+                <p class="text-gray-400 text-base sm:text-lg">
+                    Get an instant science-backed breakdown of your required daily calories and recommended fitness program.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Calculator Form & Output Container -->
+            <div class="max-w-5xl mx-auto bg-bgCard rounded-3xl p-6 sm:p-10 border border-white/10 shadow-2xl">
                 
-                <!-- Calculator Inputs -->
-                <div class="lg:col-span-7 bg-cardBg border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-6">
+                <form id="calc-form" onsubmit="calculateMacros(event)" class="grid grid-cols-1 md:grid-cols-12 gap-8">
                     
-                    <!-- Unit Switcher -->
-                    <div class="flex items-center justify-between border-b border-gray-800 pb-4">
-                        <span class="text-sm font-semibold text-gray-300" data-i18n="calc_unit_system">Measurement System</span>
-                        <div class="flex bg-darkBg p-1 rounded-xl border border-gray-800">
-                            <button id="unitMetric" onclick="setCalcUnit('metric')" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-neonGreen text-black transition-all">Metric (cm/kg)</button>
-                            <button id="unitImperial" onclick="setCalcUnit('imperial')" class="px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400 transition-all">Imperial (ft/lbs)</button>
-                        </div>
-                    </div>
-
-                    <!-- Input Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <!-- Form Controls (7 cols) -->
+                    <div class="md:col-span-7 space-y-6">
                         
-                        <!-- Gender -->
+                        <!-- Gender Selection -->
                         <div>
-                            <label class="block text-xs font-semibold text-gray-400 uppercase mb-2" data-i18n="calc_gender">Gender</label>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button type="button" onclick="setGender('male')" id="genderMale" class="py-2.5 rounded-xl border border-neonGreen bg-neonGreen/10 text-neonGreen font-bold text-xs">Male</button>
-                                <button type="button" onclick="setGender('female')" id="genderFemale" class="py-2.5 rounded-xl border border-gray-800 bg-darkBg text-gray-400 font-bold text-xs">Female</button>
+                            <label class="block font-oswald text-sm font-bold text-gray-300 uppercase mb-2">Gender</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="gender" value="male" checked class="peer hidden">
+                                    <div class="p-3 text-center rounded-xl border border-white/10 peer-checked:border-brandGreen peer-checked:bg-brandGreen/10 peer-checked:text-brandGreen font-semibold text-sm transition-all">
+                                        <i class="fa-solid fa-mars mr-2"></i> Male
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="gender" value="female" class="peer hidden">
+                                    <div class="p-3 text-center rounded-xl border border-white/10 peer-checked:border-brandGreen peer-checked:bg-brandGreen/10 peer-checked:text-brandGreen font-semibold text-sm transition-all">
+                                        <i class="fa-solid fa-venus mr-2"></i> Female
+                                    </div>
+                                </label>
                             </div>
                         </div>
 
-                        <!-- Age -->
+                        <!-- Age, Weight, Height -->
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label class="block font-oswald text-xs font-bold text-gray-300 uppercase mb-2">Age (yrs)</label>
+                                <input type="number" id="calc-age" value="25" min="15" max="80" required class="w-full bg-bgDark border border-white/15 rounded-xl px-4 py-3 text-white font-semibold focus:border-brandGreen focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-oswald text-xs font-bold text-gray-300 uppercase mb-2">Weight (kg)</label>
+                                <input type="number" id="calc-weight" value="78" min="30" max="200" required class="w-full bg-bgDark border border-white/15 rounded-xl px-4 py-3 text-white font-semibold focus:border-brandGreen focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-oswald text-xs font-bold text-gray-300 uppercase mb-2">Height (cm)</label>
+                                <input type="number" id="calc-height" value="175" min="120" max="220" required class="w-full bg-bgDark border border-white/15 rounded-xl px-4 py-3 text-white font-semibold focus:border-brandGreen focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Activity Level -->
                         <div>
-                            <label class="block text-xs font-semibold text-gray-400 uppercase mb-2" data-i18n="calc_age">Age (Years)</label>
-                            <input type="number" id="calcAge" value="26" class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-2.5 text-white font-bold focus:border-neonGreen focus:outline-none transition-colors">
+                            <label class="block font-oswald text-sm font-bold text-gray-300 uppercase mb-2">Activity Level</label>
+                            <select id="calc-activity" class="w-full bg-bgDark border border-white/15 rounded-xl px-4 py-3 text-white font-medium focus:border-brandGreen focus:outline-none">
+                                <option value="1.2">Sedentary (Desk Job, little exercise)</option>
+                                <option value="1.375" selected>Lightly Active (Workout 1-3 days/wk)</option>
+                                <option value="1.55">Moderately Active (Workout 3-5 days/wk)</option>
+                                <option value="1.725">Very Active (Workout 6-7 days/wk)</option>
+                            </select>
                         </div>
 
-                        <!-- Height -->
+                        <!-- Goal Selection -->
                         <div>
-                            <label id="heightLabel" class="block text-xs font-semibold text-gray-400 uppercase mb-2">Height (cm)</label>
-                            <input type="number" id="calcHeight" value="178" class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-2.5 text-white font-bold focus:border-neonGreen focus:outline-none transition-colors">
+                            <label class="block font-oswald text-sm font-bold text-gray-300 uppercase mb-2">Primary Goal</label>
+                            <select id="calc-goal" class="w-full bg-bgDark border border-white/15 rounded-xl px-4 py-3 text-white font-medium focus:border-brandGreen focus:outline-none">
+                                <option value="fat_loss" selected>Aggressive Fat Loss (-500 kcal)</option>
+                                <option value="maintenance">Maintain & Recomp</option>
+                                <option value="muscle_gain">Lean Muscle Gain (+300 kcal)</option>
+                            </select>
                         </div>
 
-                        <!-- Weight -->
+                        <button type="submit" class="w-full bg-brandGreen hover:bg-brandGreenHover text-black font-oswald font-extrabold py-3.5 rounded-xl transition-all uppercase tracking-wider text-lg neon-green-glow">
+                            CALCULATE MY TARGETS
+                        </button>
+
+                    </div>
+
+                    <!-- Output Column (5 cols) -->
+                    <div class="md:col-span-5 bg-bgDark rounded-2xl p-6 border border-white/10 flex flex-col justify-between">
                         <div>
-                            <label id="weightLabel" class="block text-xs font-semibold text-gray-400 uppercase mb-2">Weight (kg)</label>
-                            <input type="number" id="calcWeight" value="78" class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-2.5 text-white font-bold focus:border-neonGreen focus:outline-none transition-colors">
+                            <h3 class="font-oswald text-xl font-bold text-white border-b border-white/10 pb-3 mb-6">
+                                YOUR CUSTOM RESULTS
+                            </h3>
+
+                            <div class="space-y-6">
+                                <div>
+                                    <div class="text-xs text-gray-400 font-medium">Estimated Daily Calorie Goal</div>
+                                    <div id="res-calories" class="font-oswald text-4xl font-extrabold text-brandGreen mt-1">2,150 KCAL</div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-bgCard p-3 rounded-xl border border-white/5">
+                                        <div class="text-xs text-gray-400">BMI Index</div>
+                                        <div id="res-bmi" class="font-oswald text-xl font-bold text-white">25.5</div>
+                                        <div id="res-bmi-status" class="text-[10px] text-brandRed font-semibold uppercase">Overweight</div>
+                                    </div>
+                                    <div class="bg-bgCard p-3 rounded-xl border border-white/5">
+                                        <div class="text-xs text-gray-400">Protein Target</div>
+                                        <div id="res-protein" class="font-oswald text-xl font-bold text-brandGreen">156 g/day</div>
+                                        <div class="text-[10px] text-gray-400">2.0g per kg</div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-bgCard p-4 rounded-xl border border-white/5 space-y-2">
+                                    <div class="text-xs text-gray-300 font-semibold uppercase">Macro Split Ratio</div>
+                                    <div class="flex h-3 rounded-full overflow-hidden">
+                                        <div id="bar-p" class="bg-brandGreen w-[40%]" title="Protein"></div>
+                                        <div id="bar-c" class="bg-brandRed w-[40%]" title="Carbs"></div>
+                                        <div id="bar-f" class="bg-yellow-400 w-[20%]" title="Fats"></div>
+                                    </div>
+                                    <div class="flex justify-between text-[11px] text-gray-400 pt-1">
+                                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-brandGreen"></span> Protein 40%</span>
+                                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-brandRed"></span> Carbs 40%</span>
+                                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-yellow-400"></span> Fats 20%</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="pt-6">
+                            <button type="button" onclick="openBookingModalWithCalc()" class="w-full bg-white/10 hover:bg-white/20 text-white font-oswald font-semibold py-2.5 rounded-xl text-sm uppercase tracking-wider transition-all border border-white/20">
+                                CLAIM PLAN BASED ON RESULTS
+                            </button>
                         </div>
 
                     </div>
 
-                    <!-- Activity Level -->
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-2" data-i18n="calc_activity">Daily Activity Level</label>
-                        <select id="calcActivity" class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-3 text-white text-xs font-medium focus:border-neonGreen focus:outline-none">
-                            <option value="1.2">Sedentary (Little or no exercise)</option>
-                            <option value="1.375">Lightly Active (1-3 days/week exercise)</option>
-                            <option value="1.55" selected>Moderately Active (3-5 days/week intense exercise)</option>
-                            <option value="1.725">Very Active (6-7 days/week hard exercise)</option>
-                            <option value="1.9">Athlete / Heavy Physical Labor</option>
-                        </select>
-                    </div>
-
-                    <!-- Fitness Goal -->
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-2" data-i18n="calc_goal">Fitness Goal</label>
-                        <select id="calcGoal" class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-3 text-white text-xs font-medium focus:border-neonGreen focus:outline-none">
-                            <option value="fat_loss">Fat Loss (-20% Caloric Deficit)</option>
-                            <option value="maintain" selected>Weight Maintenance</option>
-                            <option value="muscle_gain">Lean Muscle Gain (+15% Caloric Surplus)</option>
-                        </select>
-                    </div>
-
-                    <!-- Calculate Button -->
-                    <button onclick="calculateFitnessStats()" class="w-full py-4 rounded-xl bg-gradient-to-r from-neonGreen to-emerald-500 hover:from-emerald-500 hover:to-neonGreen text-black font-oswald text-lg font-bold uppercase tracking-wider shadow-neon-glow transition-all">
-                        <span data-i18n="calc_button">Calculate Results</span>
-                    </button>
-                </div>
-
-                <!-- Results Box -->
-                <div class="lg:col-span-5 bg-cardBg border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-6">
-                    <h3 class="text-xl font-oswald font-extrabold uppercase text-white border-b border-gray-800 pb-3 flex items-center justify-between">
-                        <span data-i18n="calc_res_title">Your Personal Metrics</span>
-                        <i class="fa-solid fa-chart-pie text-neonGreen text-lg"></i>
-                    </h3>
-
-                    <!-- BMI & TDEE Display -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-darkBg p-4 rounded-2xl border border-gray-800">
-                            <p class="text-xs text-gray-400 uppercase font-semibold">Body Mass Index (BMI)</p>
-                            <p id="resBMI" class="text-3xl font-oswald font-extrabold text-neonGreen mt-1">24.6</p>
-                            <p id="resBMICategory" class="text-[11px] font-semibold text-gray-300 mt-1">Normal Weight</p>
-                        </div>
-                        <div class="bg-darkBg p-4 rounded-2xl border border-gray-800">
-                            <p class="text-xs text-gray-400 uppercase font-semibold">Daily Calories (TDEE)</p>
-                            <p id="resCalories" class="text-3xl font-oswald font-extrabold text-orangeRed mt-1">2,450</p>
-                            <p class="text-[11px] font-semibold text-gray-300 mt-1">kcal / day</p>
-                        </div>
-                    </div>
-
-                    <!-- Macro Breakdown -->
-                    <div class="space-y-3 pt-2">
-                        <p class="text-xs font-semibold text-gray-400 uppercase" data-i18n="calc_macros">Recommended Daily Macros</p>
-
-                        <!-- Protein Bar -->
-                        <div class="space-y-1">
-                            <div class="flex justify-between text-xs font-bold">
-                                <span class="text-red-400"><i class="fa-solid fa-drumstick-bite mr-1"></i> Protein</span>
-                                <span id="resProtein" class="text-white">184g (30%)</span>
-                            </div>
-                            <div class="w-full bg-darkBg h-2.5 rounded-full overflow-hidden">
-                                <div id="barProtein" class="bg-red-500 h-full rounded-full" style="width: 30%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Carbs Bar -->
-                        <div class="space-y-1">
-                            <div class="flex justify-between text-xs font-bold">
-                                <span class="text-amber-400"><i class="fa-solid fa-wheat-awn mr-1"></i> Carbohydrates</span>
-                                <span id="resCarbs" class="text-white">245g (40%)</span>
-                            </div>
-                            <div class="w-full bg-darkBg h-2.5 rounded-full overflow-hidden">
-                                <div id="barCarbs" class="bg-amber-500 h-full rounded-full" style="width: 40%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Fats Bar -->
-                        <div class="space-y-1">
-                            <div class="flex justify-between text-xs font-bold">
-                                <span class="text-emerald-400"><i class="fa-solid fa-avocado mr-1"></i> Healthy Fats</span>
-                                <span id="resFats" class="text-white">82g (30%)</span>
-                            </div>
-                            <div class="w-full bg-darkBg h-2.5 rounded-full overflow-hidden">
-                                <div id="barFats" class="bg-emerald-500 h-full rounded-full" style="width: 30%"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CTA inside calc -->
-                    <button onclick="openBookingModal('Calculated Custom Plan')" class="w-full py-3 rounded-xl bg-accentDark border border-neonGreen/40 text-neonGreen font-oswald text-sm font-bold uppercase tracking-wider hover:bg-neonGreen hover:text-black transition-all">
-                        <span data-i18n="calc_res_cta">Get Custom Meal Plan From Minte</span>
-                    </button>
-                </div>
+                </form>
 
             </div>
+
         </div>
     </section>
 
-    <!-- Coaching Packages Section -->
-    <section id="packages" class="py-24 bg-cardBg border-t border-gray-900">
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-24 bg-bgCard border-t border-white/5 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
-                <span class="text-xs font-bold text-orangeRed uppercase tracking-widest" data-i18n="pkg_subtitle">Invest In Yourself</span>
-                <h2 class="text-3xl sm:text-5xl font-oswald font-extrabold uppercase text-white" data-i18n="pkg_title">
-                    COACHING <span class="text-neonGreen">PACKAGES</span>
+                <div class="inline-block px-3 py-1 rounded-md bg-brandGreen/10 border border-brandGreen/30 text-brandGreen font-oswald text-sm font-semibold tracking-wider uppercase">
+                    MEDIA SHOCK
+                </div>
+                <h2 class="font-oswald text-4xl sm:text-6xl font-extrabold text-white">
+                    COACHING & <span class="text-brandRed">PHYSIQUE</span> GALLERY
                 </h2>
-                <p class="text-gray-400 text-sm sm:text-base" data-i18n="pkg_desc">
-                    Choose the program that best matches your fitness ambitions. Direct coaching with Minte.
+                <p class="text-gray-400 text-base sm:text-lg">
+                    Real gym sessions, competition posing, and client training moments.
                 </p>
 
-                <!-- Currency Switcher -->
-                <div class="inline-flex items-center bg-darkBg p-1.5 rounded-xl border border-gray-800 mt-4">
-                    <button id="currETB" onclick="setCurrency('ETB')" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-orangeRed text-white transition-all">ETB (Birr)</button>
-                    <button id="currUSD" onclick="setCurrency('USD')" class="px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400 transition-all">USD ($)</button>
+                <!-- Filter Tabs -->
+                <div class="flex flex-wrap justify-center gap-3 pt-4">
+                    <button onclick="filterGallery('all')" class="gallery-tab active bg-brandGreen text-black font-oswald font-bold px-5 py-2 rounded-full text-sm uppercase tracking-wider transition-all">ALL</button>
+                    <button onclick="filterGallery('workout')" class="gallery-tab bg-bgDark text-gray-300 hover:text-white font-oswald font-bold px-5 py-2 rounded-full text-sm uppercase tracking-wider transition-all border border-white/10">WORKOUTS</button>
+                    <button onclick="filterGallery('coaching')" class="gallery-tab bg-bgDark text-gray-300 hover:text-white font-oswald font-bold px-5 py-2 rounded-full text-sm uppercase tracking-wider transition-all border border-white/10">COACHING</button>
+                    <button onclick="filterGallery('physique')" class="gallery-tab bg-bgDark text-gray-300 hover:text-white font-oswald font-bold px-5 py-2 rounded-full text-sm uppercase tracking-wider transition-all border border-white/10">PHYSIQUE</button>
                 </div>
             </div>
 
-            <!-- Packages Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Gallery Grid -->
+            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                <!-- Package 1: Kickstart -->
-                <div class="bg-darkBg border border-gray-800 hover:border-gray-700 rounded-3xl p-8 flex flex-col justify-between transition-all hover:scale-105">
-                    <div>
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">1 Month Program</span>
-                        <h3 class="text-2xl font-oswald font-extrabold text-white mt-1">1-Month Kickstart</h3>
-                        
-                        <div class="my-6">
-                            <span class="pkg-price-etb font-oswald text-4xl font-extrabold text-white">4,500 <span class="text-sm font-normal text-gray-400">ETB</span></span>
-                            <span class="pkg-price-usd hidden font-oswald text-4xl font-extrabold text-white">$79 <span class="text-sm font-normal text-gray-400">USD</span></span>
-                        </div>
-
-                        <ul class="space-y-3 text-xs text-gray-300">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGreen"></i> Custom Gym or Home Workout Plan</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGreen"></i> Personalized Calorie & Macro Guide</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGreen"></i> Weekly Progress Check-ins</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGreen"></i> Direct Telegram / Chat Support</li>
-                        </ul>
+                <!-- Item 1 -->
+                <div class="gallery-item workout group relative aspect-[4/3] bg-bgDark rounded-2xl overflow-hidden cursor-pointer border border-white/10 hover:border-brandGreen transition-all" onclick="openLightbox('https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=1200&q=80', 'Heavy Arm Blast Session')">
+                    <img src="menu.jpg" alt="Workout" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+                        <span class="text-brandGreen font-oswald text-xs font-bold uppercase">WORKOUT</span>
+                        <h4 class="font-oswald text-xl font-bold text-white">Heavy Bicep & Arm Conditioning</h4>
                     </div>
-
-                    <button onclick="openBookingModal('1-Month Kickstart')" class="mt-8 w-full py-3.5 rounded-xl bg-accentDark border border-gray-700 hover:border-neonGreen text-white hover:text-neonGreen font-oswald font-bold uppercase tracking-wider transition-all">
-                        Select Kickstart
-                    </button>
                 </div>
 
-                <!-- Package 2: Most Popular 12-Week Shred (Featured) -->
-                <div class="bg-darkBg border-2 border-orangeRed rounded-3xl p-8 flex flex-col justify-between relative shadow-orange-glow transition-all hover:scale-105">
-                    
-                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-orangeRed text-white font-oswald text-xs font-bold uppercase px-4 py-1 rounded-full">
-                        MOST POPULAR TRANSFORMER
+                <!-- Item 2 -->
+                <div class="gallery-item physique group relative aspect-[4/3] bg-bgDark rounded-2xl overflow-hidden cursor-pointer border border-white/10 hover:border-brandGreen transition-all" onclick="openLightbox('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80', 'Competition Prep Posing Routine')">
+                    <img src="gal2.png" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+                        <span class="text-brandRed font-oswald text-xs font-bold uppercase">PHYSIQUE</span>
+                        <h4 class="font-oswald text-xl font-bold text-white">Competition Peak Stage Posing</h4>
                     </div>
-
-                    <div>
-                        <span class="text-xs font-bold text-orangeRed uppercase tracking-wider">3 Months Full Transformation</span>
-                        <h3 class="text-2xl font-oswald font-extrabold text-white mt-1">12-Week Shred & Sculpt</h3>
-                        
-                        <div class="my-6">
-                            <span class="pkg-price-etb font-oswald text-4xl font-extrabold text-orangeRed">11,500 <span class="text-sm font-normal text-gray-400">ETB</span></span>
-                            <span class="pkg-price-usd hidden font-oswald text-4xl font-extrabold text-orangeRed">$199 <span class="text-sm font-normal text-gray-400">USD</span></span>
-                        </div>
-
-                        <ul class="space-y-3 text-xs text-gray-300">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-orangeRed"></i> Everything in Kickstart Plan</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-orangeRed"></i> Complete 12-Week Workout Periodization</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-orangeRed"></i> Custom Meal Plan Adaptations Every 2 Weeks</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-orangeRed"></i> Form Correction Video Reviews</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-orangeRed"></i> 24/7 Priority Chat Access with Minte</li>
-                        </ul>
-                    </div>
-
-                    <button onclick="openBookingModal('12-Week Shred & Sculpt')" class="mt-8 w-full py-3.5 rounded-xl bg-orangeRed text-white font-oswald font-bold uppercase tracking-wider shadow-orange-glow transition-all hover:bg-red-600">
-                        Join 12-Week Program
-                    </button>
                 </div>
 
-                <!-- Package 3: VIP 1-on-1 -->
-                <div class="bg-darkBg border border-gray-800 hover:border-gray-700 rounded-3xl p-8 flex flex-col justify-between transition-all hover:scale-105">
-                    <div>
-                        <span class="text-xs font-bold text-neonGreen uppercase tracking-wider">In-Person or VIP Remote</span>
-                        <h3 class="text-2xl font-oswald font-extrabold text-white mt-1">VIP 1-on-1 Coaching</h3>
-                        
-                        <div class="my-6">
-                            <span class="pkg-price-etb font-oswald text-4xl font-extrabold text-neonGreen">18,000 <span class="text-sm font-normal text-gray-400">ETB / mo</span></span>
-                            <span class="pkg-price-usd hidden font-oswald text-4xl font-extrabold text-neonGreen">$320 <span class="text-sm font-normal text-gray-400">USD / mo</span></span>
-                        </div>
-
-                        <ul class="space-y-3 text-xs text-gray-300">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGreen"></i> In-Person Personal Training Sessions</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGreen"></i> Daily Macro & Habit Accountability</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGreen"></i> Supplement & Recovery Protocols</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-neonGreen"></i> Dedicated 1-on-1 Phone Calls</li>
-                        </ul>
+                <!-- Item 3 -->
+                <div class="gallery-item coaching group relative aspect-[4/3] bg-bgDark rounded-2xl overflow-hidden cursor-pointer border border-white/10 hover:border-brandGreen transition-all" onclick="openLightbox('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1200&q=80', '1-on-1 Form Breakdown & Guidance')">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80" alt="Coaching" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+                        <span class="text-brandGreen font-oswald text-xs font-bold uppercase">COACHING</span>
+                        <h4 class="font-oswald text-xl font-bold text-white">Personalized Client Form Correction</h4>
                     </div>
+                </div>
 
-                    <button onclick="openBookingModal('VIP 1-on-1 Coaching')" class="mt-8 w-full py-3.5 rounded-xl bg-accentDark border border-gray-700 hover:border-neonGreen text-white hover:text-neonGreen font-oswald font-bold uppercase tracking-wider transition-all">
-                        Apply For VIP
-                    </button>
+                <!-- Item 4 -->
+                <div class="gallery-item workout group relative aspect-[4/3] bg-bgDark rounded-2xl overflow-hidden cursor-pointer border border-white/10 hover:border-brandGreen transition-all" onclick="openLightbox('https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1200&q=80', 'Barbell Compound Power Sets')">
+                    <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80" alt="Workout" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+                        <span class="text-brandGreen font-oswald text-xs font-bold uppercase">WORKOUT</span>
+                        <h4 class="font-oswald text-xl font-bold text-white">Barbell Deadlift & Power Training</h4>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="gallery-item coaching group relative aspect-[4/3] bg-bgDark rounded-2xl overflow-hidden cursor-pointer border border-white/10 hover:border-brandGreen transition-all" onclick="openLightbox('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=1200&q=80', 'High-Intensity Group Coaching')">
+                    <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=600&q=80" alt="Coaching" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+                        <span class="text-brandGreen font-oswald text-xs font-bold uppercase">COACHING</span>
+                        <h4 class="font-oswald text-xl font-bold text-white">Group HIIT & Hypertrophy Session</h4>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="gallery-item physique group relative aspect-[4/3] bg-bgDark rounded-2xl overflow-hidden cursor-pointer border border-white/10 hover:border-brandGreen transition-all" onclick="openLightbox('https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=1200&q=80', 'Sub-10% Bodyfat Physique Peak')">
+                    <img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=600&q=80" alt="Physique" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
+                        <span class="text-brandRed font-oswald text-xs font-bold uppercase">PHYSIQUE</span>
+                        <h4 class="font-oswald text-xl font-bold text-white">Low Bodyfat Shredded Condition</h4>
+                    </div>
                 </div>
 
             </div>
+
         </div>
     </section>
 
-    <!-- Supabase Embedded Chat Section -->
-    <section id="chat" class="py-24 bg-darkBg border-t border-gray-900">
+    <!-- Contact & Footer Section -->
+    <section id="contact" class="py-24 relative bg-bgDark">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
-                <span class="text-xs font-bold text-neonGreen uppercase tracking-widest" data-i18n="chat_subtitle">Real-Time Messaging</span>
-                <h2 class="text-3xl sm:text-5xl font-oswald font-extrabold uppercase text-white" data-i18n="chat_title">
-                    CHAT WITH <span class="text-orangeRed">COACH MINTE</span>
-                </h2>
-                <p class="text-gray-400 text-sm sm:text-base" data-i18n="chat_desc">
-                    Ask questions, inquire about training schedules, or get instant assistance. Powered by Supabase real-time database with live fallback.
-                </p>
-            </div>
-
-            <!-- Main Embedded Chat Box Window -->
-            <div class="max-w-4xl mx-auto bg-cardBg border border-gray-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col h-[600px]">
-                
-                <!-- Chat Window Header Bar -->
-                <div class="bg-accentDark p-4 border-b border-gray-800 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="relative">
-                            <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=200&auto=format&fit=crop" 
-                                 class="w-10 h-10 rounded-full object-cover border border-neonGreen"
-                                 onerror="this.src='https://placehold.co/100x100/0D1117/00FF38?text=Minte'">
-                            <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-neonGreen border-2 border-accentDark"></span>
-                        </div>
-                        <div>
-                            <h4 class="font-oswald text-base font-bold text-white flex items-center gap-2">
-                                Coach Minte 
-                                <span id="chatModeBadge" class="text-[10px] font-normal px-2 py-0.5 rounded-full bg-neonGreen/20 text-neonGreen border border-neonGreen/30 uppercase tracking-wide">Demo Mode</span>
-                            </h4>
-                            <p class="text-[11px] text-gray-400" data-i18n="chat_status_online">Usually replies in a few minutes</p>
-                        </div>
-                    </div>
-
-                    <!-- Config / Settings Gear Button -->
-                    <button onclick="toggleChatConfigModal()" class="p-2 rounded-xl bg-darkBg border border-gray-800 hover:border-orangeRed text-gray-400 hover:text-white transition-all flex items-center gap-2 text-xs">
-                        <i class="fa-solid fa-gear text-orangeRed"></i>
-                        <span class="hidden sm:inline" data-i18n="chat_config_btn">Supabase Setup</span>
-                    </button>
-                </div>
-
-                <!-- Chat Messages Scroll Area -->
-                <div id="embeddedChatMessages" class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4">
-                    <!-- Default Welcome Message -->
-                    <div class="flex items-start gap-3">
-                        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=200&auto=format&fit=crop" 
-                             class="w-8 h-8 rounded-full object-cover border border-neonGreen mt-1"
-                             onerror="this.src='https://placehold.co/100x100/0D1117/00FF38?text=Minte'">
-                        <div class="bg-accentDark border border-gray-800 rounded-2xl rounded-tl-none p-4 max-w-[80%] space-y-1">
-                            <span class="text-[10px] text-neonGreen font-semibold">Coach Minte</span>
-                            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed" data-i18n="chat_welcome_msg">
-                                Selam! 👋 Welcome to MINTE.FIT. How can I help you achieve your fitness transformation today? Feel free to ask about custom workout routines or meal plans!
-                            </p>
-                            <span class="text-[9px] text-gray-500 block text-right mt-1">Just now</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Suggested Question Pills -->
-                <div class="px-4 py-2 border-t border-gray-800/80 bg-darkBg/50 flex items-center gap-2 overflow-x-auto no-scrollbar">
-                    <button onclick="sendQuickMessage('What are your monthly coaching rates?')" class="px-3 py-1 rounded-full bg-cardBg border border-gray-800 hover:border-neonGreen text-[11px] text-gray-300 whitespace-nowrap transition-all">
-                        💰 Coaching Rates?
-                    </button>
-                    <button onclick="sendQuickMessage('Do you offer custom nutrition meal plans?')" class="px-3 py-1 rounded-full bg-cardBg border border-gray-800 hover:border-neonGreen text-[11px] text-gray-300 whitespace-nowrap transition-all">
-                        🥗 Nutrition Plans?
-                    </button>
-                    <button onclick="sendQuickMessage('የስልጠና እና የምግብ ፕሮግራም ዋጋ ስንት ነው?')" class="px-3 py-1 rounded-full bg-cardBg border border-gray-800 hover:border-neonGreen text-[11px] text-gray-300 whitespace-nowrap transition-all">
-                        🇪🇹 የስልጠና ዋጋ (አማርኛ)
-                    </button>
-                </div>
-
-                <!-- Chat Input Controls -->
-                <div class="p-4 bg-accentDark border-t border-gray-800 flex items-center gap-3">
-                    <input type="text" id="embeddedChatInput" onkeydown="if(event.key==='Enter') sendEmbeddedMessage()" 
-                           placeholder="Type a message to Coach Minte..." data-i18n-placeholder="chat_input_placeholder"
-                           class="flex-1 bg-darkBg border border-gray-800 rounded-xl px-4 py-3 text-xs sm:text-sm text-white focus:outline-none focus:border-neonGreen transition-colors">
+            <div class="bg-gradient-to-r from-bgCard to-bgCardHover border border-white/10 rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     
-                    <button onclick="sendEmbeddedMessage()" class="px-5 py-3 rounded-xl bg-orangeRed hover:bg-red-600 text-white font-oswald text-sm font-bold uppercase tracking-wider shadow-orange-glow transition-all flex items-center gap-2">
-                        <span class="hidden sm:inline" data-i18n="chat_send">Send</span>
-                        <i class="fa-solid fa-paper-plane text-xs"></i>
-                    </button>
+                    <div class="space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brandGreen/10 border border-brandGreen/30 text-brandGreen font-oswald text-sm font-semibold uppercase">
+                            DIRECT CONTACT
+                        </div>
+                        <h2 class="font-oswald text-4xl sm:text-5xl font-extrabold text-white">
+                            READY TO CHANGE YOUR <span class="text-brandGreen">LIFE?</span>
+                        </h2>
+                        <p class="text-gray-300 text-base leading-relaxed">
+                            Reach out directly on WhatsApp or call to discuss your goals with Coach Minte. Slots are limited to maintain elite quality.
+                        </p>
+
+                        <!-- Contact Info Items -->
+                        <div class="space-y-4 pt-2">
+                            <div class="flex items-center gap-4 text-white">
+                                <div class="w-12 h-12 rounded-xl bg-brandGreen/10 border border-brandGreen/30 text-brandGreen flex items-center justify-center text-xl">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-400">WhatsApp Direct</div>
+                                    <a href="https://wa.me/251988714114" target="_blank" class="font-oswald text-xl font-bold hover:text-brandGreen transition-colors">+251 988 714 114</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 text-white">
+                                <div class="w-12 h-12 rounded-xl bg-brandRed/10 border border-brandRed/30 text-brandRed flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-400">Primary Location</div>
+                                    <div class="font-oswald text-xl font-bold">Hawassa, Ethiopia</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Fast Action Card -->
+                    <div class="bg-bgDark/80 p-8 rounded-2xl border border-white/10 space-y-6">
+                        <h3 class="font-oswald text-2xl font-bold text-white">GET STARTED TODAY</h3>
+                        <p class="text-xs text-gray-400">Click below to fill out your quick 1-minute fitness intake form.</p>
+                        
+                        <button onclick="openBookingModal('Footer Direct Action')" class="w-full bg-brandGreen hover:bg-brandGreenHover text-black font-oswald font-extrabold py-4 rounded-xl text-lg uppercase tracking-wider neon-green-glow transition-all">
+                            APPLY FOR SUBSCRIPTION NOW
+                        </button>
+
+                        <button onclick="copyToClipboard('+251988714114', 'Coach Minte Phone Number Copied!')" class="w-full bg-white/5 hover:bg-white/10 text-gray-300 font-oswald font-semibold py-3 rounded-xl text-sm uppercase tracking-wider transition-all border border-white/10 flex items-center justify-center gap-2">
+                            <i class="fa-regular fa-copy"></i> COPY PHONE NUMBER
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer Bottom Strip -->
+            <div class="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+                <div class="flex items-center gap-2 font-oswald text-base text-white">
+                    <span>MINTE</span><span class="text-brandGreen">.FIT</span>
+                    <span class="text-xs font-inter text-gray-500 ml-2">© 2026 MINTE FITNESS COACH. ALL RIGHTS RESERVED.</span>
                 </div>
 
+                <div class="flex items-center gap-6 text-gray-400 text-lg">
+                    <a href="https://wa.me/251988714114" target="_blank" class="hover:text-brandGreen transition-colors" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="#" class="hover:text-brandGreen transition-colors" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-brandGreen transition-colors" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" class="hover:text-brandGreen transition-colors" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                </div>
             </div>
+
         </div>
     </section>
 
-    <!-- Floating Chat Widget Button (Bottom Right) -->
-    <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end">
-        <button onclick="toggleChatWidget()" class="w-14 h-14 rounded-full bg-gradient-to-tr from-orangeRed to-neonGreen p-0.5 shadow-neon-glow hover:scale-110 transition-transform relative group">
-            <div class="w-full h-full bg-darkBg rounded-full flex items-center justify-center text-neonGreen group-hover:text-white transition-colors">
-                <i class="fa-solid fa-comments text-2xl"></i>
-            </div>
-            <span class="absolute top-0 right-0 w-4 h-4 rounded-full bg-neonGreen border-2 border-darkBg animate-ping"></span>
-            <span class="absolute top-0 right-0 w-4 h-4 rounded-full bg-neonGreen border-2 border-darkBg"></span>
-        </button>
-    </div>
-
-    <!-- Floating Chat Widget Pop-up Box -->
-    <div id="chatWidget" class="hidden fixed bottom-24 right-4 sm:right-6 w-[92vw] sm:w-[380px] h-[520px] bg-cardBg border border-gray-800 rounded-3xl shadow-2xl z-50 flex flex-col overflow-hidden transition-all duration-300">
-        <!-- Widget Header -->
-        <div class="bg-accentDark p-4 border-b border-gray-800 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=200&auto=format&fit=crop" 
-                     class="w-9 h-9 rounded-full object-cover border border-neonGreen"
-                     onerror="this.src='https://placehold.co/100x100/0D1117/00FF38?text=Minte'">
-                <div>
-                    <h5 class="font-oswald text-sm font-bold text-white">Coach Minte Live</h5>
-                    <p class="text-[10px] text-neonGreen font-semibold">Online • Ready to help</p>
-                </div>
-            </div>
-            <button onclick="toggleChatWidget()" class="text-gray-400 hover:text-white p-1">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-        </div>
-
-        <!-- Widget Messages Area -->
-        <div id="widgetMessages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-darkBg/60">
-            <!-- Messages mirror embedded chat -->
-        </div>
-
-        <!-- Widget Input Area -->
-        <div class="p-3 bg-accentDark border-t border-gray-800 flex items-center gap-2">
-            <input type="text" id="widgetInput" onkeydown="if(event.key==='Enter') sendWidgetMessage()" 
-                   placeholder="Ask Minte a question..." 
-                   class="flex-1 bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-neonGreen">
-            <button onclick="sendWidgetMessage()" class="p-2.5 rounded-xl bg-neonGreen text-black font-bold hover:scale-105 transition-transform">
-                <i class="fa-solid fa-paper-plane text-xs"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- Supabase Setup Modal -->
-    <div id="chatConfigModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-cardBg border border-gray-800 rounded-3xl max-w-md w-full p-6 space-y-6 relative shadow-2xl">
+    <!-- Booking / Subscription Modal -->
+    <div id="booking-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="bg-bgCard border border-white/15 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative animate-fadeIn">
             
-            <button onclick="toggleChatConfigModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-
-            <div class="space-y-2">
-                <h3 class="text-2xl font-oswald font-extrabold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-database text-orangeRed"></i> Supabase Setup
-                </h3>
-                <p class="text-xs text-gray-400">
-                    Connect your real-time Supabase project database. If left blank, demo auto-responder mode will be used.
-                </p>
-            </div>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">SUPABASE_URL</label>
-                    <input type="text" id="supaUrlInput" placeholder="https://your-project.supabase.co" 
-                           class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:border-orangeRed focus:outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">SUPABASE_ANON_KEY</label>
-                    <input type="password" id="supaKeyInput" placeholder="eyJhYmdj...your-anon-key" 
-                           class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:border-orangeRed focus:outline-none">
-                </div>
-
-                <!-- Database SQL Helper Code Snippet -->
-                <div class="bg-darkBg p-3 rounded-xl border border-gray-800 text-[11px] text-gray-400 space-y-1">
-                    <p class="font-bold text-neonGreen">Optional Supabase Table SQL:</p>
-                    <code class="block font-mono text-[10px] text-gray-300 bg-cardBg p-2 rounded border border-gray-800 overflow-x-auto">
-                        create table messages ( <br/>
-                          id uuid default gen_random_uuid() primary key, <br/>
-                          sender_name text, <br/>
-                          message text, <br/>
-                          is_coach boolean default false, <br/>
-                          created_at timestamp default now() <br/>
-                        );
-                    </code>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-                <button onclick="saveSupabaseConfig()" class="flex-1 py-3 rounded-xl bg-orangeRed text-white font-oswald font-bold uppercase tracking-wider shadow-orange-glow">
-                    Save Credentials
-                </button>
-                <button onclick="clearSupabaseConfig()" class="py-3 px-4 rounded-xl bg-darkBg border border-gray-800 text-xs font-semibold text-gray-400 hover:text-white">
-                    Reset Demo
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Booking Intake Modal -->
-    <div id="bookingModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-cardBg border border-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
-            
-            <button onclick="closeBookingModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-
-            <div class="space-y-1">
-                <span class="text-xs font-bold text-neonGreen uppercase tracking-widest">Start Your Journey</span>
-                <h3 class="text-2xl font-oswald font-extrabold uppercase text-white" data-i18n="modal_book_title">
-                    BOOK CONSULTATION WITH MINTE
-                </h3>
-            </div>
-
-            <form id="bookingForm" onsubmit="submitBooking(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Selected Program</label>
-                    <input type="text" id="modalSelectedPlan" readonly value="12-Week Shred & Sculpt" 
-                           class="w-full bg-accentDark border border-gray-800 text-neonGreen font-bold rounded-xl px-4 py-2.5 text-xs focus:outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Full Name *</label>
-                    <input type="text" required placeholder="e.g. Abebe Bikila" 
-                           class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:border-neonGreen focus:outline-none">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Phone Number *</label>
-                        <input type="tel" required placeholder="0911223344" 
-                               class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:border-neonGreen focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Location</label>
-                        <input type="text" placeholder="Addis Ababa / Hawassa" 
-                               class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:border-neonGreen focus:outline-none">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Primary Fitness Goal</label>
-                    <select class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:border-neonGreen focus:outline-none">
-                        <option>Fat Loss & Weight Reduction</option>
-                        <option>Muscle Growth & Hypertrophy</option>
-                        <option>Athletic Performance & Conditioning</option>
-                        <option>Post-Injury Rehabilitation</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Message to Coach (Optional)</label>
-                    <textarea rows="3" placeholder="Tell Minte about your current fitness level or any injuries..." 
-                              class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:border-neonGreen focus:outline-none"></textarea>
-                </div>
-
-                <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-orangeRed to-red-600 text-white font-oswald text-lg font-bold uppercase tracking-wider shadow-orange-glow transition-all hover:scale-[1.02]">
-                    Submit Intake Application
-                </button>
-            </form>
-
-        </div>
-    </div>
-
-    <!-- Lightbox Image Preview Modal -->
-    <div id="lightboxModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4" onclick="closeLightbox()">
-        <div class="relative max-w-4xl w-full" onclick="event.stopPropagation()">
-            <button onclick="closeLightbox()" class="absolute -top-10 right-0 text-white text-2xl hover:text-orangeRed">
+            <!-- Close Button -->
+            <button onclick="closeBookingModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-xl w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <img id="lightboxImage" src="" class="w-full max-h-[85vh] object-contain rounded-2xl border border-gray-800">
-            <p id="lightboxCaption" class="text-center font-oswald text-base text-gray-300 mt-3"></p>
+
+            <div class="p-8">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brandGreen/10 border border-brandGreen/30 text-brandGreen font-oswald text-xs font-semibold uppercase mb-3">
+                    CLIENT APPLICATION
+                </div>
+                <h3 class="font-oswald text-3xl font-extrabold text-white">JOIN <span class="text-brandGreen">MINTE.FIT</span></h3>
+                <p class="text-xs text-gray-400 mt-1 mb-6">Selected Program: <span id="modal-program-name" class="text-brandGreen font-bold">General Subscription</span></p>
+
+                <form id="booking-form" onsubmit="submitBooking(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-oswald text-gray-300 uppercase mb-1">Full Name *</label>
+                        <input type="text" id="book-name" required placeholder="e.g. Abebe Bikila" class="w-full bg-bgDark border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:border-brandGreen focus:outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-oswald text-gray-300 uppercase mb-1">Phone / WhatsApp *</label>
+                            <input type="tel" id="book-phone" required placeholder="+251 9..." class="w-full bg-bgDark border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:border-brandGreen focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-oswald text-gray-300 uppercase mb-1">Primary Goal</label>
+                            <select id="book-goal" class="w-full bg-bgDark border border-white/15 rounded-xl px-3 py-3 text-sm text-white focus:border-brandGreen focus:outline-none">
+                                <option value="Fat Loss & Shred">Fat Loss & Shred</option>
+                                <option value="Lean Muscle Gain">Lean Muscle Gain</option>
+                                <option value="Contest Prep">Contest Prep</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-oswald text-gray-300 uppercase mb-1">Your Message or Current Routine</label>
+                        <textarea id="book-msg" rows="3" placeholder="Tell Coach Minte about your training history and goals..." class="w-full bg-bgDark border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:border-brandGreen focus:outline-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-brandGreen hover:bg-brandGreenHover text-black font-oswald font-extrabold py-3.5 rounded-xl text-base uppercase tracking-wider neon-green-glow transition-all mt-4">
+                        SUBMIT APPLICATION VIA WHATSAPP
+                    </button>
+                </form>
+            </div>
+
         </div>
     </div>
 
-    <!-- Toast Notification Box -->
-    <div id="toastNotification" class="fixed top-24 right-6 z-50 max-w-sm bg-cardBg border border-neonGreen text-white px-5 py-4 rounded-2xl shadow-neon-glow flex items-center gap-3 transform translate-x-full transition-transform duration-300">
-        <i class="fa-solid fa-circle-check text-neonGreen text-xl"></i>
-        <div>
-            <h6 id="toastTitle" class="font-oswald font-bold text-sm">Notification</h6>
-            <p id="toastMessage" class="text-xs text-gray-300">Action completed successfully.</p>
+    <!-- Lightbox Modal for Gallery Preview -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-white text-2xl hover:text-brandGreen">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="Enlarged Gallery" class="max-w-full max-h-[75vh] rounded-2xl object-contain border border-white/20 shadow-2xl">
+            <h4 id="lightbox-caption" class="font-oswald text-xl font-bold text-white mt-4 text-center"></h4>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-cardBg border-t border-gray-900 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-orangeRed flex items-center justify-center font-oswald font-bold text-black">M</div>
-                <span class="font-oswald text-xl font-bold tracking-wider text-white">MINTE<span class="text-orangeRed">.FIT</span></span>
-            </div>
-
-            <p class="text-xs text-gray-500 text-center">
-                &copy; <span id="currentYear"></span> MINTE.FIT - Head Coach Minte. All Rights Reserved. Built for Peak Performance.
-            </p>
-
-            <div class="flex items-center gap-4 text-gray-400">
-                <a href="https://tiktok.com/@minte.fitnesscoach" target="_blank" class="hover:text-neonGreen text-lg"><i class="fa-brands fa-tiktok"></i></a>
-                <a href="https://t.me/mintefitness" target="_blank" class="hover:text-neonGreen text-lg"><i class="fa-brands fa-telegram"></i></a>
-                <a href="tel:0988714114" class="hover:text-neonGreen text-lg"><i class="fa-solid fa-phone"></i></a>
-            </div>
-
-        </div>
-    </footer>
 
     <script>
-        /* --------------------------------------------------------
-         * 1. Dynamic Translation Dictionary (English & Amharic)
-         * -------------------------------------------------------- */
-        const i18nData = {
-            en: {
-                nav_about: "About Coach",
-                nav_transformations: "Results",
-                nav_gallery: "Gallery",
-                nav_calculator: "Fitness Calc",
-                nav_packages: "Packages",
-                nav_chat: "Live Chat",
-                nav_cta: "Book Consultation",
-                hero_badge: "#1 Personal Trainer & Mindset Coach",
-                hero_title_1: "TRANSFORM YOUR",
-                hero_title_2: "PHYSIQUE.",
-                hero_title_3: "ELEVATE YOUR MIND.",
-                hero_subtitle: "Achieve peak athletic performance, shed stubborn fat, and build elite muscular strength with customized training programs tailored for real life.",
-                hero_cta_start: "Start Transformation",
-                hero_cta_chat: "Chat With Coach",
-                stat_clients: "Clients Transformed",
-                stat_experience: "Coach Experience",
-                stat_success: "Success Rate",
-                coach_title: "Head Coach & Founder",
-                coach_phone_label: "Direct Call / WhatsApp",
-                coach_tiktok_label: "TikTok Official",
-                coach_follow: "Follow",
-                trans_subtitle: "Real People. Real Results.",
-                trans_title: "CLIENT TRANSFORMATIONS",
-                trans_desc: "Drag the interactive comparison slider left and right to inspect real physique changes achieved through Minte Fitness programs.",
-                before_tag: "BEFORE",
-                after_tag: "AFTER (12 WEEKS)",
-                trans_bodyfat: "Body Fat Lost",
-                trans_time: "Duration",
-                gallery_subtitle: "Training in Action",
-                gallery_title: "MINTE.FIT GALLERY",
-                gallery_desc: "Explore inside the gym, personal training sessions, nutrition plans, and client achievements.",
-                calc_subtitle: "Precision Fitness Analytics",
-                calc_title: "BMI, TDEE & MACRO CALCULATOR",
-                calc_desc: "Calculate your exact daily caloric expenditure and ideal macronutrient breakdown tailored for your body goals.",
-                calc_unit_system: "Measurement System",
-                calc_gender: "Gender",
-                calc_age: "Age (Years)",
-                calc_activity: "Daily Activity Level",
-                calc_goal: "Fitness Goal",
-                calc_button: "Calculate Results",
-                calc_res_title: "Your Personal Metrics",
-                calc_macros: "Recommended Daily Macros",
-                calc_res_cta: "Get Custom Meal Plan From Minte",
-                pkg_subtitle: "Invest In Yourself",
-                pkg_title: "COACHING PACKAGES",
-                pkg_desc: "Choose the program that best matches your fitness ambitions. Direct coaching with Minte.",
-                chat_subtitle: "Real-Time Messaging",
-                chat_title: "CHAT WITH COACH MINTE",
-                chat_desc: "Ask questions, inquire about training schedules, or get instant assistance.",
-                chat_status_online: "Usually replies in a few minutes",
-                chat_config_btn: "Supabase Setup",
-                chat_input_placeholder: "Type a message to Coach Minte...",
-                chat_send: "Send",
-                modal_book_title: "BOOK CONSULTATION WITH MINTE"
-            },
-            am: {
-                nav_about: "ስለ አሰልጣኙ",
-                nav_transformations: "ውጤቶች",
-                nav_gallery: "ፎቶዎች",
-                nav_calculator: "የጤና ስሌት",
-                nav_packages: "የስልጠና ፓኬጆች",
-                nav_chat: "የቀጥታ ውይይት",
-                nav_cta: "ምክክር ይመዝግቡ",
-                hero_badge: "#1 የተረጋገጠ የጂም እና አእምሮ አሰልጣኝ",
-                hero_title_1: "ሰውነትዎን",
-                hero_title_2: "ይለውጡ::",
-                hero_title_3: "አእምሮዎን ያሳድጉ::",
-                hero_subtitle: "በአጭር ጊዜ ውስጥ አላስፈላጊ ስብን በማስወገድ ጠንካራ እና ማራኪ የሰውነት ቅርፅን በምርጥ የአሰልጣኝ ሚንቴ ፕሮግራሞች ይገንቡ::",
-                hero_cta_start: "አሁኑኑ ይጀምሩ",
-                hero_cta_chat: "ከሚንቴ ጋር ያውሩ",
-                stat_clients: "የተለወጡ ደንበኞች",
-                stat_experience: "የስራ ልምድ",
-                stat_success: "የስኬት መጠን",
-                coach_title: "ዋና አሰልጣኝ እና መስራች",
-                coach_phone_label: "ቀጥታ ስልክ / ዋትስአፕ",
-                coach_tiktok_label: "ቲክቶክ ገፅ",
-                coach_follow: "ተከተሉ",
-                trans_subtitle: "እውነተኛ ሰዎች:: እውነተኛ ውጤቶች::",
-                trans_title: "የደንበኞች የለውጥ ምስሎች",
-                trans_desc: "ተንሸራታቹን ወደ ግራ እና ቀኝ በመሳብ በስተፊቱ እና በስተኋላ የነበረውን አስደናቂ ልዩነት ይመልከቱ::",
-                before_tag: "በፊት",
-                after_tag: "ከ12 ሳምንታት በኋላ",
-                trans_bodyfat: "የቀነሰው ስብ",
-                trans_time: "የወሰደው ጊዜ",
-                gallery_subtitle: "የስልጠና ትዕይንቶች",
-                gallery_title: "የሚንቴ ፊትነስ ጋለሪ",
-                gallery_desc: "የጂም ስልጠናዎችን፣ የ1-ለ-1 ምክክሮችን እና ጤናማ የአመጋገብ ስልቶችን በፎቶ ይመልከቱ::",
-                calc_subtitle: "ትክክለኛ የሰውነት ስሌት",
-                calc_title: "BMI እና የካሎሪ ማስሊያ",
-                calc_desc: "ለሰውነትዎ የሚያስፈልገውን የዕለታዊ ካሎሪ እና ፕሮቲን መጠን በትክክል ያሰሉ::",
-                calc_unit_system: "የመለኪያ አይነት",
-                calc_gender: "ፆታ",
-                calc_age: "ዕድሜ (በዓመት)",
-                calc_activity: "የዕለት ተዕለት እንቅስቃሴ",
-                calc_goal: "የስልጠና ዓላማ",
-                calc_button: "ስሌቱን አስላ",
-                calc_res_title: "የእርስዎ ውጤት",
-                calc_macros: "የሚመከር የዕለት ምግብ ስብጥር",
-                calc_res_cta: "የምግብ ፕሮግራም በሚንቴ ለማዘጋጀት",
-                pkg_subtitle: "ለጤናዎ ኢንቨስት ያድርጉ",
-                pkg_title: "የስልጠና ፓኬጆች",
-                pkg_desc: "ለእርስዎ ተስማሚ የሆነውን የስልጠና ፓኬጅ በመምረጥ ቀጥታ ከአሰልጣኝ ሚንቴ ጋር ይስሩ::",
-                chat_subtitle: "የቀጥታ ውይይት",
-                chat_title: "ከአሰልጣኝ ሚንቴ ጋር ይወያዩ",
-                chat_desc: "ጥያቄዎችን ይጠይቁ፣ ስለ ሰዓቶች እና ዋጋዎች ቀጥታ መረጃ ያግኙ::",
-                chat_status_online: "ብዙውን ጊዜ በጥቂት ደቂቃዎች ውስጥ ይመልሳል",
-                chat_config_btn: "የSupabase ማስተካከያ",
-                chat_input_placeholder: "መልእክትዎን እዚህ ይጻፉ...",
-                chat_send: "ላክ",
-                modal_book_title: "ከሚንቴ ጋር ምክክር ይመዝግቡ"
-            }
-        };
 
-        let currentLang = 'en';
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'am' : 'en';
-            document.getElementById('langLabel').innerText = currentLang === 'en' ? 'EN | አማርኛ' : 'አማርኛ | EN';
-            document.getElementById('langLabelMobile').innerText = currentLang === 'en' ? 'EN | አማርኛ' : 'አማርኛ | EN';
-            
-            // Switch HTML font class if Amharic
-            if(currentLang === 'am') {
-                document.body.classList.add('font-ethiopic');
-            } else {
-                document.body.classList.remove('font-ethiopic');
-            }
-
-            // Translate all elements with data-i18n
-            document.querySelectorAll('[data-i18n]').forEach(elem => {
-                const key = elem.getAttribute('data-i18n');
-                if(i18nData[currentLang][key]) {
-                    elem.innerText = i18nData[currentLang][key];
-                }
-            });
-
-            // Translate inputs with data-i18n-placeholder
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(elem => {
-                const key = elem.getAttribute('data-i18n-placeholder');
-                if(i18nData[currentLang][key]) {
-                    elem.placeholder = i18nData[currentLang][key];
-                }
-            });
-
-            showToast('Language Changed', currentLang === 'en' ? 'Switched to English' : 'ወደ አማርኛ ተቀይሯል');
-        }
-
-        /* --------------------------------------------------------
-         * 2. Supabase Setup & Real-time Messaging Handling
-         * -------------------------------------------------------- */
-        let supabaseClient = null;
-        let isDemoMode = true;
-
-        // Auto Load saved credentials from localStorage if present
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('currentYear').innerText = new Date().getFullYear();
-            
-            const savedUrl = localStorage.getItem('MINTE_SUPABASE_URL');
-            const savedKey = localStorage.getItem('MINTE_SUPABASE_KEY');
-
-            if(savedUrl && savedKey) {
-                document.getElementById('supaUrlInput').value = savedUrl;
-                document.getElementById('supaKeyInput').value = savedKey;
-                initSupabase(savedUrl, savedKey);
-            }
-
-            initGallery();
-            initBeforeAfterSlider();
-            calculateFitnessStats();
+        // Mobile menu drawer toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
         });
 
-        function initSupabase(url, key) {
-            try {
-                if(window.supabase) {
-                    supabaseClient = window.supabase.createClient(url, key);
-                    isDemoMode = false;
-                    document.getElementById('chatModeBadge').innerText = 'Supabase Connected';
-                    document.getElementById('chatModeBadge').className = 'text-[10px] font-normal px-2 py-0.5 rounded-full bg-orangeRed/20 text-orangeRed border border-orangeRed/30 uppercase tracking-wide';
-                    
-                    // Listen for Postgres changes on 'messages' table
-                    supabaseClient
-                        .channel('public:messages')
-                        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-                            appendChatMessage(payload.new.sender_name, payload.new.message, payload.new.is_coach);
-                        })
-                        .subscribe();
+        // Close mobile drawer on link click
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
 
-                    showToast('Supabase Live', 'Real-time database connection established!');
-                }
-            } catch(e) {
-                console.error("Supabase connect failed", e);
-                isDemoMode = true;
-            }
-        }
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const isGreen = type === 'success';
+            const bgClass = isGreen ? 'bg-bgCard border-brandGreen/60 text-white' : 'bg-bgCard border-brandRed/60 text-white';
+            const icon = isGreen ? 'fa-circle-check text-brandGreen' : 'fa-circle-exclamation text-brandRed';
 
-        function saveSupabaseConfig() {
-            const url = document.getElementById('supaUrlInput').value.trim();
-            const key = document.getElementById('supaKeyInput').value.trim();
-
-            if(url && key) {
-                localStorage.setItem('MINTE_SUPABASE_URL', url);
-                localStorage.setItem('MINTE_SUPABASE_KEY', key);
-                initSupabase(url, key);
-                toggleChatConfigModal();
-            } else {
-                showToast('Input Error', 'Please enter valid URL and Key');
-            }
-        }
-
-        function clearSupabaseConfig() {
-            localStorage.removeItem('MINTE_SUPABASE_URL');
-            localStorage.removeItem('MINTE_SUPABASE_KEY');
-            isDemoMode = true;
-            supabaseClient = null;
-            document.getElementById('chatModeBadge').innerText = 'Demo Mode';
-            document.getElementById('chatModeBadge').className = 'text-[10px] font-normal px-2 py-0.5 rounded-full bg-neonGreen/20 text-neonGreen border border-neonGreen/30 uppercase tracking-wide';
-            toggleChatConfigModal();
-            showToast('Demo Mode', 'Switched back to built-in Coach Auto-Responder.');
-        }
-
-        function sendEmbeddedMessage() {
-            const input = document.getElementById('embeddedChatInput');
-            const msg = input.value.trim();
-            if(!msg) return;
-
-            processUserChatMessage(msg);
-            input.value = '';
-        }
-
-        function sendWidgetMessage() {
-            const input = document.getElementById('widgetInput');
-            const msg = input.value.trim();
-            if(!msg) return;
-
-            processUserChatMessage(msg);
-            input.value = '';
-        }
-
-        function sendQuickMessage(text) {
-            processUserChatMessage(text);
-        }
-
-        function processUserChatMessage(msgText) {
-            // Render user msg in both UI views
-            appendChatMessage('You', msgText, false);
-
-            if(!isDemoMode && supabaseClient) {
-                // Insert into Supabase table
-                supabaseClient.from('messages').insert([
-                    { sender_name: 'Client', message: msgText, is_coach: false }
-                ]).then(({ error }) => {
-                    if(error) console.error("Supabase insert error:", error);
-                });
-            } else {
-                // Demo Fallback Auto-responder with realistic typing delay
-                setTimeout(() => {
-                    let coachReply = "Thanks for reaching out! Direct coaching with Coach Minte includes tailored workouts, macro tracking, and 24/7 accountability. Click 'Book Consultation' above to reserve your spot!";
-                    
-                    const lower = msgText.toLowerCase();
-                    if(lower.includes('rate') || lower.includes('price') || lower.includes('ዋጋ') || lower.includes('cost')) {
-                        coachReply = "Our coaching packages start at 4,500 ETB for 1 Month up to 11,500 ETB for the full 12-Week Transformation! You can check the Packages section above for details.";
-                    } else if(lower.includes('meal') || lower.includes('nutrition') || lower.includes('ምግብ')) {
-                        coachReply = "Yes! Every program includes personalized nutritional guidance based on local Ethiopian food choices (Injera, eggs, chicken, lentils) calculated specifically for your macros.";
-                    } else if(lower.includes('🇪🇹') || lower.includes('ሰላም')) {
-                        coachReply = "ሰላም! የአሰልጣኝ ሚንቴ የፊትነስ እና የምግብ ስልጠና ፕሮግራሞች በተለየ መልኩ ለእርስዎ እንዲስማሙ ተደርገው የሚዘጋጁ ናቸው:: ለበለጠ መረጃ በ0988714114 ይደውሉልን::";
-                    }
-
-                    appendChatMessage('Coach Minte', coachReply, true);
-
-                }, 1000);
-            }
-        }
-
-        function appendChatMessage(sender, text, isCoach) {
-            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            const msgHTML = `
-                <div class="flex items-start gap-3 ${isCoach ? '' : 'flex-row-reverse'} animate-fade-in">
-                    <div class="w-8 h-8 rounded-full ${isCoach ? 'bg-neonGreen text-black' : 'bg-orangeRed text-white'} font-oswald font-bold flex items-center justify-center text-xs shrink-0">
-                        ${isCoach ? 'M' : 'U'}
-                    </div>
-                    <div class="${isCoach ? 'bg-accentDark border border-gray-800' : 'bg-orangeRed/20 border border-orangeRed/40'} rounded-2xl p-3 max-w-[80%] space-y-1">
-                        <div class="flex items-center justify-between gap-4">
-                            <span class="text-[10px] font-bold ${isCoach ? 'text-neonGreen' : 'text-orangeRed'}">${sender}</span>
-                            <span class="text-[9px] text-gray-500">${timeStr}</span>
-                        </div>
-                        <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">${text}</p>
-                    </div>
-                </div>
+            toast.className = `p-4 rounded-xl border ${bgClass} shadow-xl flex items-center gap-3 transform transition-all duration-300 pointer-events-auto border-l-4`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-lg"></i>
+                <div class="text-xs sm:text-sm font-medium">${message}</div>
             `;
 
-            // Append to Embedded Chat
-            const embeddedContainer = document.getElementById('embeddedChatMessages');
-            if(embeddedContainer) {
-                embeddedContainer.insertAdjacentHTML('beforeend', msgHTML);
-                embeddedContainer.scrollTop = embeddedContainer.scrollHeight;
-            }
+            container.appendChild(toast);
 
-            // Append to Widget Chat
-            const widgetContainer = document.getElementById('widgetMessages');
-            if(widgetContainer) {
-                widgetContainer.insertAdjacentHTML('beforeend', msgHTML);
-                widgetContainer.scrollTop = widgetContainer.scrollHeight;
-            }
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-10');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
         }
 
-        /* --------------------------------------------------------
-         * 3. Transformation Draggable Before/After Slider
-         * -------------------------------------------------------- */
-        const transformData = [
-            {
-                name: "Dawit Tekle",
-                plan: "12-Week Fat Loss & Muscle Sculpt",
-                loss: "-18.5 KG",
-                quote: "\"Coach Minte changed my entire relationship with fitness and nutrition. The customized macros and realistic workouts fit my busy schedule perfectly. I lost 18.5kg while building real strength!\"",
-                fat: "-12%",
-                duration: "90 Days",
-                beforeImg: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1000&auto=format&fit=crop",
-                afterImg: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1000&auto=format&fit=crop"
-            },
-            {
-                name: "Selam Haile",
-                plan: "Tone & Body Recomposition",
-                loss: "-9.0 KG",
-                quote: "\"I was struggling with low energy and plateaued weight. Minte's structured guidance gave me confidence in the weight room and noticeable core definition in 8 weeks!\"",
-                fat: "-8%",
-                duration: "60 Days",
-                beforeImg: "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1000&auto=format&fit=crop",
-                afterImg: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1000&auto=format&fit=crop"
-            },
-            {
-                name: "Yonas Alemu",
-                plan: "Lean Mass & Hypertrophy",
-                loss: "+7.5 KG Muscle",
-                quote: "\"Gained solid muscle mass without adding belly fat. Minte's hypertrophy periodization program is unmatched in Ethiopia.\"",
-                fat: "+Lean Mass",
-                duration: "120 Days",
-                beforeImg: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1000&auto=format&fit=crop",
-                afterImg: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1000&auto=format&fit=crop"
-            }
-        ];
+        // Copy to clipboard helper
+        function copyToClipboard(text, successMsg) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast(successMsg || 'Copied to clipboard!');
+        }
 
-        function switchTransformation(index) {
-            const data = transformData[index];
-            document.getElementById('clientName').innerText = data.name;
-            document.getElementById('clientPlan').innerText = data.plan;
-            document.getElementById('clientQuote').innerText = data.quote;
+        // Interactive Before/After Split Dragging logic
+        const sliderContainer = document.getElementById('before-after-slider');
+        const beforeWrapper = document.getElementById('before-wrapper');
+        const sliderHandle = document.getElementById('slider-handle');
 
-            // Highlight tab
-            document.querySelectorAll('.trans-tab').forEach((tab, i) => {
-                if(i === index) {
-                    tab.className = "trans-tab active flex-1 py-2 rounded-xl bg-neonGreen text-black font-semibold text-xs transition-all";
-                } else {
-                    tab.className = "trans-tab flex-1 py-2 rounded-xl bg-accentDark border border-gray-800 text-gray-300 font-semibold text-xs hover:border-gray-700 transition-all";
-                }
+        let isDragging = false;
+
+        if (sliderContainer) {
+            const updateSliderPos = (xPos) => {
+                const rect = sliderContainer.getBoundingClientRect();
+                let percentage = ((xPos - rect.left) / rect.width) * 100;
+                if (percentage < 5) percentage = 5;
+                if (percentage > 95) percentage = 95;
+
+                beforeWrapper.style.width = `${percentage}%`;
+                sliderHandle.style.left = `${percentage}%`;
+            };
+
+            sliderContainer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                updateSliderPos(e.clientX);
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                updateSliderPos(e.clientX);
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            // Touch support for mobile
+            sliderContainer.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                if (e.touches[0]) updateSliderPos(e.touches[0].clientX);
+            });
+
+            window.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                if (e.touches[0]) updateSliderPos(e.touches[0].clientX);
+            });
+
+            window.addEventListener('touchend', () => {
+                isDragging = false;
             });
         }
 
-        function initBeforeAfterSlider() {
-            const container = document.getElementById('baSlider');
-            const overlay = document.getElementById('baOverlay');
-            const handle = document.getElementById('baHandle');
-            let isDragging = false;
+        // Macro Calculator Algorithm
+        function calculateMacros(e) {
+            e.preventDefault();
 
-            function moveSlider(x) {
-                const rect = container.getBoundingClientRect();
-                let position = ((x - rect.left) / rect.width) * 100;
-                if(position < 0) position = 0;
-                if(position > 100) position = 100;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const age = parseFloat(document.getElementById('calc-age').value) || 25;
+            const weight = parseFloat(document.getElementById('calc-weight').value) || 75;
+            const height = parseFloat(document.getElementById('calc-height').value) || 175;
+            const activity = parseFloat(document.getElementById('calc-activity').value) || 1.375;
+            const goal = document.getElementById('calc-goal').value;
 
-                overlay.style.width = position + '%';
-                handle.style.left = position + '%';
-            }
-
-            container.addEventListener('mousedown', () => isDragging = true);
-            window.addEventListener('mouseup', () => isDragging = false);
-            container.addEventListener('mousemove', (e) => {
-                if(isDragging) moveSlider(e.clientX);
-            });
-
-            // Touch events for mobile responsiveness
-            container.addEventListener('touchstart', () => isDragging = true);
-            window.addEventListener('touchend', () => isDragging = false);
-            container.addEventListener('touchmove', (e) => {
-                if(isDragging && e.touches[0]) moveSlider(e.touches[0].clientX);
-            });
-        }
-
-        /* --------------------------------------------------------
-         * 4. Filterable Gallery & Lightbox Modal
-         * -------------------------------------------------------- */
-        const galleryItems = [
-            { category: 'gym', title: 'Heavy Deadlift Coaching', img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop' },
-            { category: 'coaching', title: '1-on-1 Personal Guidance', img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop' },
-            { category: 'nutrition', title: 'Custom Ethiopian High-Protein Meal Prep', img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop' },
-            { category: 'gym', title: 'Dumbbell Bench Press Form Correction', img: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=800&auto=format&fit=crop' },
-            { category: 'coaching', title: 'Client Form Review & Assessment', img: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800&auto=format&fit=crop' },
-            { category: 'nutrition', title: 'Macro Tracking & Nutrition Consultation', img: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=800&auto=format&fit=crop' }
-        ];
-
-        function initGallery() {
-            filterGallery('all');
-        }
-
-        function filterGallery(cat) {
-            const grid = document.getElementById('galleryGrid');
-            grid.innerHTML = '';
-
-            // Update filter tabs
-            document.querySelectorAll('.gallery-filter').forEach(btn => {
-                if(btn.getAttribute('onclick').includes(cat)) {
-                    btn.className = 'gallery-filter active px-5 py-2 rounded-xl bg-neonGreen text-black font-bold text-xs uppercase transition-all';
-                } else {
-                    btn.className = 'gallery-filter px-5 py-2 rounded-xl bg-darkBg border border-gray-800 text-gray-300 font-semibold text-xs uppercase hover:border-neonGreen transition-all';
-                }
-            });
-
-            const filtered = cat === 'all' ? galleryItems : galleryItems.filter(item => item.category === cat);
-
-            filtered.forEach(item => {
-                const card = `
-                    <div class="group relative rounded-3xl overflow-hidden border border-gray-800 bg-cardBg aspect-video cursor-pointer shadow-lg hover:border-neonGreen transition-all"
-                         onclick="openLightbox('${item.img}', '${item.title}')">
-                        <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
-                            <div>
-                                <span class="text-[10px] font-bold text-neonGreen uppercase tracking-wider">${item.category}</span>
-                                <h4 class="font-oswald text-lg font-bold text-white">${item.title}</h4>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                grid.insertAdjacentHTML('beforeend', card);
-            });
-        }
-
-        function openLightbox(src, caption) {
-            document.getElementById('lightboxImage').src = src;
-            document.getElementById('lightboxCaption').innerText = caption;
-            document.getElementById('lightboxModal').classList.remove('hidden');
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightboxModal').classList.add('hidden');
-        }
-
-        /* --------------------------------------------------------
-         * 5. Interactive BMI, TDEE & Calorie Macro Calculator
-         * -------------------------------------------------------- */
-        let calcUnit = 'metric';
-        let calcGender = 'male';
-
-        function setCalcUnit(unit) {
-            calcUnit = unit;
-            const metricBtn = document.getElementById('unitMetric');
-            const impBtn = document.getElementById('unitImperial');
-
-            if(unit === 'metric') {
-                metricBtn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold bg-neonGreen text-black transition-all';
-                impBtn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400 transition-all';
-                document.getElementById('heightLabel').innerText = 'Height (cm)';
-                document.getElementById('weightLabel').innerText = 'Weight (kg)';
-                document.getElementById('calcHeight').value = '178';
-                document.getElementById('calcWeight').value = '78';
-            } else {
-                impBtn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold bg-neonGreen text-black transition-all';
-                metricBtn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400 transition-all';
-                document.getElementById('heightLabel').innerText = 'Height (Inches)';
-                document.getElementById('weightLabel').innerText = 'Weight (Lbs)';
-                document.getElementById('calcHeight').value = '70';
-                document.getElementById('calcWeight').value = '172';
-            }
-            calculateFitnessStats();
-        }
-
-        function setGender(g) {
-            calcGender = g;
-            const maleBtn = document.getElementById('genderMale');
-            const femaleBtn = document.getElementById('genderFemale');
-
-            if(g === 'male') {
-                maleBtn.className = 'py-2.5 rounded-xl border border-neonGreen bg-neonGreen/10 text-neonGreen font-bold text-xs';
-                femaleBtn.className = 'py-2.5 rounded-xl border border-gray-800 bg-darkBg text-gray-400 font-bold text-xs';
-            } else {
-                femaleBtn.className = 'py-2.5 rounded-xl border border-neonGreen bg-neonGreen/10 text-neonGreen font-bold text-xs';
-                maleBtn.className = 'py-2.5 rounded-xl border border-gray-800 bg-darkBg text-gray-400 font-bold text-xs';
-            }
-            calculateFitnessStats();
-        }
-
-        function calculateFitnessStats() {
-            const age = parseFloat(document.getElementById('calcAge').value) || 25;
-            let height = parseFloat(document.getElementById('calcHeight').value) || 175;
-            let weight = parseFloat(document.getElementById('calcWeight').value) || 75;
-            const activity = parseFloat(document.getElementById('calcActivity').value) || 1.55;
-            const goal = document.getElementById('calcGoal').value;
-
-            // Convert to metric internally if imperial
-            let weightKg = weight;
-            let heightCm = height;
-
-            if(calcUnit === 'imperial') {
-                weightKg = weight * 0.453592;
-                heightCm = height * 2.54;
-            }
-
-            // BMI Calculation
-            const heightMeters = heightCm / 100;
-            const bmi = weightKg / (heightMeters * heightMeters);
-
-            let bmiCategory = 'Normal Weight';
-            if(bmi < 18.5) bmiCategory = 'Underweight';
-            else if(bmi >= 25 && bmi < 29.9) bmiCategory = 'Overweight';
-            else if(bmi >= 30) bmiCategory = 'Obese';
-
-            // BMR using Mifflin-St Jeor Equation
-            let bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age);
-            bmr = calcGender === 'male' ? bmr + 5 : bmr - 161;
+            // BMR Calculation (Mifflin-St Jeor)
+            let bmr = (10 * weight) + (6.25 * height) - (5 * age);
+            bmr = gender === 'male' ? bmr + 5 : bmr - 161;
 
             // TDEE
             let tdee = bmr * activity;
 
-            // Goal Adjustment
-            if(goal === 'fat_loss') tdee *= 0.80; // 20% deficit
-            else if(goal === 'muscle_gain') tdee *= 1.15; // 15% surplus
+            // Target calories depending on goal
+            let targetCalories = tdee;
+            if (goal === 'fat_loss') targetCalories -= 500;
+            if (goal === 'muscle_gain') targetCalories += 300;
 
-            tdee = Math.round(tdee);
+            // BMI
+            const heightInM = height / 100;
+            const bmi = (weight / (heightInM * heightInM)).toFixed(1);
 
-            // Macros (Protein: 30%, Carbs: 40%, Fats: 30%)
-            const proteinGrams = Math.round((tdee * 0.30) / 4);
-            const carbsGrams = Math.round((tdee * 0.40) / 4);
-            const fatsGrams = Math.round((tdee * 0.30) / 9);
+            let bmiStatus = 'Normal';
+            if (bmi < 18.5) bmiStatus = 'Underweight';
+            else if (bmi >= 25 && bmi < 30) bmiStatus = 'Overweight';
+            else if (bmi >= 30) bmiStatus = 'Obese';
 
-            // Update UI
-            document.getElementById('resBMI').innerText = bmi.toFixed(1);
-            document.getElementById('resBMICategory').innerText = bmiCategory;
-            document.getElementById('resCalories').innerText = tdee.toLocaleString();
+            // Protein requirement (2g per kg)
+            const proteinGrams = Math.round(weight * 2.0);
 
-            document.getElementById('resProtein').innerText = `${proteinGrams}g (30%)`;
-            document.getElementById('resCarbs').innerText = `${carbsGrams}g (40%)`;
-            document.getElementById('resFats').innerText = `${fatsGrams}g (30%)`;
+            // UI Update
+            document.getElementById('res-calories').innerText = `${Math.round(targetCalories).toLocaleString()} KCAL`;
+            document.getElementById('res-bmi').innerText = bmi;
+            document.getElementById('res-bmi-status').innerText = bmiStatus;
+            document.getElementById('res-protein').innerText = `${proteinGrams} g/day`;
+
+            showToast('Calorie & Macro Targets recalculated!');
         }
 
-        /* --------------------------------------------------------
-         * 6. Currency Switcher for Packages
-         * -------------------------------------------------------- */
-        function setCurrency(curr) {
-            const currETB = document.getElementById('currETB');
-            const currUSD = document.getElementById('currUSD');
+        // Gallery Filter Tab Logic
+        function filterGallery(category) {
+            const tabs = document.querySelectorAll('.gallery-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-brandGreen', 'text-black');
+                tab.classList.add('bg-bgDark', 'text-gray-300');
+            });
 
-            if(curr === 'ETB') {
-                currETB.className = 'px-4 py-1.5 rounded-lg text-xs font-bold bg-orangeRed text-white transition-all';
-                currUSD.className = 'px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400 transition-all';
-                document.querySelectorAll('.pkg-price-etb').forEach(e => e.classList.remove('hidden'));
-                document.querySelectorAll('.pkg-price-usd').forEach(e => e.classList.add('hidden'));
-            } else {
-                currUSD.className = 'px-4 py-1.5 rounded-lg text-xs font-bold bg-orangeRed text-white transition-all';
-                currETB.className = 'px-4 py-1.5 rounded-lg text-xs font-bold text-gray-400 transition-all';
-                document.querySelectorAll('.pkg-price-usd').forEach(e => e.classList.remove('hidden'));
-                document.querySelectorAll('.pkg-price-etb').forEach(e => e.classList.add('hidden'));
-            }
+            event.target.classList.remove('bg-bgDark', 'text-gray-300');
+            event.target.classList.add('bg-brandGreen', 'text-black');
+
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         }
 
-        /* --------------------------------------------------------
-         * 7. UI Modals & Toast Handlers
-         * -------------------------------------------------------- */
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
+        // Lightbox Functions
+        function openLightbox(src, caption) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-caption').innerText = caption;
+            document.getElementById('lightbox-modal').classList.remove('hidden');
+            document.getElementById('lightbox-modal').classList.add('flex');
         }
 
-        function toggleChatWidget() {
-            const widget = document.getElementById('chatWidget');
-            widget.classList.toggle('hidden');
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').classList.add('hidden');
+            document.getElementById('lightbox-modal').classList.remove('flex');
         }
 
-        function toggleChatConfigModal() {
-            document.getElementById('chatConfigModal').classList.toggle('hidden');
+        // Modal Booking Controls
+        function openBookingModal(programName = 'General Subscription') {
+            document.getElementById('modal-program-name').innerText = programName;
+            const modal = document.getElementById('booking-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
-        function openBookingModal(packageName = '12-Week Shred & Sculpt') {
-            document.getElementById('modalSelectedPlan').value = packageName;
-            document.getElementById('bookingModal').classList.remove('hidden');
+        function openBookingModalWithCalc() {
+            const cal = document.getElementById('res-calories').innerText;
+            openBookingModal(`Custom Calorie Plan (${cal})`);
         }
 
         function closeBookingModal() {
-            document.getElementById('bookingModal').classList.add('hidden');
+            const modal = document.getElementById('booking-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
 
+        // Handle Booking Form Submit via WhatsApp Redirect
         function submitBooking(e) {
             e.preventDefault();
+            const name = document.getElementById('book-name').value;
+            const phone = document.getElementById('book-phone').value;
+            const goal = document.getElementById('book-goal').value;
+            const program = document.getElementById('modal-program-name').innerText;
+            const msg = document.getElementById('book-msg').value;
+
+            const text = `Hello Coach Minte! I would like to join MINTE.FIT.%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Phone:* ${encodeURIComponent(phone)}%0A*Program:* ${encodeURIComponent(program)}%0A*Goal:* ${encodeURIComponent(goal)}%0A*Notes:* ${encodeURIComponent(msg)}`;
+            
+            const whatsappUrl = `https://wa.me/251988714114?text=${text}`;
+
             closeBookingModal();
-            showToast('Intake Submitted!', 'Coach Minte will contact you via Telegram/Phone shortly.');
-        }
-
-        function showToast(title, message) {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastTitle').innerText = title;
-            document.getElementById('toastMessage').innerText = message;
-
-            toast.classList.remove('translate-x-full');
+            showToast('Redirecting to WhatsApp with your details...');
 
             setTimeout(() => {
-                toast.classList.add('translate-x-full');
-            }, 4000);
+                window.open(whatsappUrl, '_blank');
+            }, 800);
         }
     </script>
 </body>
